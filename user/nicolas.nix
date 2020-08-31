@@ -20,6 +20,9 @@ lib.mkMerge [
     users.groups.${username} = { };
 
     home-manager.users.${username} = { pkgs, ... }: {
+      # XDG
+      fonts.fontconfig.enable = lib.mkForce true;
+
       gtk = {
         enable = true;
         iconTheme = {
@@ -61,9 +64,6 @@ lib.mkMerge [
       services.kdeconnect.indicator = true;
       # Started with libindicator if `xsession.preferStatusNotifierItems = true`
       services.network-manager-applet.enable = true;
-
-      # Run emacs as a service
-      services.emacs.enable = true;
     };
   })
   # </isLinux>
@@ -77,16 +77,12 @@ lib.mkMerge [
       };
 
       home.sessionVariables = {
-        NIX_PAGER = "less --RAW-CONTROL-CHARS --quit-if-one-screen";
+        NIX_PAGER = "${pkgs.less}/bin/less --RAW-CONTROL-CHARS --quit-if-one-screen";
       };
 
       # HomeManager config
       # `man 5 home-configuration.nix`
       manual.manpages.enable = true;
-
-      # XDG
-      fonts.fontconfig.enable = lib.mkForce true;
-      programs.emacs.enable = true;
     };
   }
 ]

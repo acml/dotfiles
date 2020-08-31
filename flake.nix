@@ -19,6 +19,8 @@
     vim-theme-anderson = { url = "github:tlhr/anderson.vim"; flake = false; };
     vim-theme-synthwave84 = { url = "github:artanikin/vim-synthwave84"; flake = false; };
     vim-theme-gruvbox = { url = "github:morhetz/gruvbox"; flake = false; };
+    emacs-pgtk-nativecomp.url = "github:berbiche/emacs-pgtk-nativecomp-overlay";
+    doom-emacs = { url = "github:vlaci/nix-doom-emacs"; flake = false; };
   };
 
   outputs = { nixpkgs, self, ... }@inputs: let
