@@ -116,7 +116,8 @@
        ;;elm                 ; care for a cup of TEA?
        emacs-lisp          ; drown in parentheses
        ;; TODO: flycheck-rebar3 is missing from nixpkgs
-       ;;erlang              ; an elegant language for a more civilized age
+       ;; lsp requires sourcer
+       ;;(erlang +lsp)         ; an elegant language for a more civilized age
        ;;ess                 ; emacs speaks statistics
        ;;faust               ; dsp, but you get to keep your soul
        ;;fsharp              ; ML stands for Microsoft's Language
