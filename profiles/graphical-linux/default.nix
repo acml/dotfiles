@@ -4,49 +4,32 @@
   imports = [ ./user.nix ./xserver.nix ];
 
   services.xserver.enable = true;
-  services.xserver.displayManager.lightdm = {
-    enable = true;
-    greeters.enso = {
-      enable = true;
-      blur = true;
-    };
-  };
+  services.xserver.displayManager.sddm.enable = true;
+  # services.xserver.displayManager.lightdm = {
+  #   enable = true;
+  #   greeters.enso = {
+  #     enable = true;
+  #     blur = true;
+  #   };
+  # };
 
+  services.fractalart.enable = true;
   # To use the gnome-keyring and have it act as the ssh-agent
-  services.gnome3.gnome-keyring.enable = true;
-  programs.seahorse.enable = true;
-  environment.systemPackages = with pkgs; [ polkit polkit_gnome ];
+  # services.gnome3.gnome-keyring.enable = true;
+  # programs.seahorse.enable = true;
+  # environment.systemPackages = with pkgs; [ polkit polkit_gnome ];
 
-  services.xserver.libinput.enable = true;
-  services.xserver.layout = "us";
+  # xdg = {
+  #   icons.enable = true;
+  #   portal.enable = true;
+  #   portal.gtkUsePortal = true;
+  # };
 
-  hardware.opengl = {
-    enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
-    extraPackages = with pkgs; [ libva ];
-  };
-
-  security.polkit.enable = true;
-
-  services.flatpak.enable = true;
-  xdg = {
-    icons.enable = true;
-    portal.enable = true;
-    portal.gtkUsePortal = true;
-  };
-
-  services.printing.enable = true;
-
-  services.avahi.enable = true;
-  services.avahi.nssmdns = true;
-  services.printing.browsing = true;
-
-  nixpkgs.config.chromium = {
-    enableWideVine = true;
-    enableVaapi = true;
-    enablePepperFlash = false;
-  };
+  # nixpkgs.config.chromium = {
+  #   enableWideVine = true;
+  #   enableVaapi = true;
+  #   enablePepperFlash = false;
+  # };
 
   fonts = {
     fontDir.enable = true;

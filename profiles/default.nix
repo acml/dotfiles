@@ -21,10 +21,12 @@ rec {
   steam = mkLinuxProfile [ ./steam ];
   sway = mkLinuxProfile [ ./sway ];
   xfce = mkLinuxProfile [ ./xfce ];
+  bspwm = mkLinuxProfile [ ./bspwm ];
 
   # MacOS only profiles
   yabai = mkDarwinProfile [ ./yabai ];
 
   # Pseudo profiles
-  default-linux = mkLinuxProfile [ core-linux dev graphical-linux xfce programs sway ctf ];
+  # default-linux = mkLinuxProfile [ core-linux dev graphical-linux xfce programs sway ctf ];
+  default-linux = mkLinuxProfile [ core-linux dev graphical-linux bspwm programs kde ];
 }

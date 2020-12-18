@@ -108,7 +108,7 @@ in
         xaver.clang-format
       ]
       ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
-        ms-vsliveshare.vsliveshare
+        # ms-vsliveshare.vsliveshare
         ms-python.python
         llvm-org.lldb-vscode
       ]

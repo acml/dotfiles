@@ -46,7 +46,8 @@ let
   OUTPUT-HOME-DELL-LEFT  = "Dell Inc. DELL U2414H R9F1P55S45FL";
   OUTPUT-HOME-BENQ = "Unknown BenQ EW3270U 74J08749019";
   OUTPUT-HOME-DELL = "Dell Inc. DELL U3219Q F9WNWP2";
-  OUTPUT-LAPTOP = "eDP-1";
+  #OUTPUT-LAPTOP = "eDP-1";
+  OUTPUT-LAPTOP = "LVDS-1";
 
   # Sway variables
   imageFolder = toString config.programs.swaylock.imageFolder;

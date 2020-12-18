@@ -32,10 +32,63 @@ lib.mkMerge [
           ];
           emacsPackagesOverlay = overrides;
           extraPackages = with pkgs; [
-            (hunspellWithDicts [
-              "en_CA-large"
-              "fr-any"
-            ])
+            ## Doom dependencies
+            global
+            (ripgrep.override { withPCRE2 = true; })
+
+            ## Optional dependencies
+            jq # cli to extract data out of json input
+            fd # faster projectile indexing
+            imagemagick # for image-dired
+            nixfmt
+            (lib.mkIf (config.programs.gnupg.agent.enable)
+              pinentry_emacs) # in-emacs gnupg prompts
+            unzip
+            zstd # for undo-fu-session/undo-tree compression
+
+            ## Module dependencies
+            # :checkers spell
+            (aspellWithDicts (dicts: with dicts; [ en en-computers en-science tr ]))
+            # :checkers grammar
+            languagetool
+            # :tools editorconfig
+            editorconfig-core-c # per-project style config
+            # :tools lookup & :lang org +roam
+            sqlite
+            # :lang cc
+            ccls
+            (lib.mkIf isLinux glslang)
+            # :lang go
+            gocode
+            gomodifytags
+            gotests
+            gore
+            # :lang javascript
+            nodePackages.javascript-typescript-langserver
+            # :lang sh
+            nodePackages.bash-language-server
+            # :lang latex & :lang org (latex previews)
+            texlive.combined.scheme-tetex
+            # :lang markdown
+            pandoc
+            # :lang rust
+            # (pkgs.latest.rustChannels.stable.rust.override {
+            #   extensions = [
+            #     "clippy-preview"
+            #     # "miri-preview"
+            #     "rls-preview"
+            #     "rustfmt-preview"
+            #     "llvm-tools-preview"
+            #     "rust-analysis"
+            #     "rust-std"
+            #     "rustc-dev"
+            #     "rust-src"
+            #   ];
+            # })
+            # :ui treemacs
+            python3 # advanced git-mode and directory flattening features require python3
+            man-pages
+            posix_man_pages
           ];
           extraConfig = ''
             (setq ispell-program-name "hunspell")

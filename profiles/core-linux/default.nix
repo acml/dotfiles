@@ -6,15 +6,14 @@
     ./services.nix
   ];
 
+  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
+  networking.useDHCP = false;
+
   networking.networkmanager.enable = true;
 
-  # Virtualization
-  virtualisation.docker.enable = true;
-
-  time.timeZone = "America/Montreal";
-  location.provider = "geoclue2";
-
   networking.firewall.enable = true;
+  networking.firewall.allowPing = true;
+
   networking.nameservers = [ "1.1.1.1" "8.8.8.8" "9.9.9.9" ];
 
   # Enable sound.

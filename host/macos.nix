@@ -17,12 +17,21 @@ in
     trustedUsers = [ "@admin" ];
   };
 
-  # This is a single-user Nix install
-  services.nix-daemon.enable = lib.mkForce false;
+  # This is a multi-user Nix install
+  services.nix-daemon.enable = lib.mkForce true;
 
-  programs.fish.enable = true;
+  programs.fish.enable = false;
   programs.zsh.enable = true;
   services.emacs.enable = true;
+
+  # fonts
+  fonts = {
+    enableFontDir = true;
+    fonts = with pkgs; [
+      emacs-all-the-icons-fonts
+      (nerdfonts.override { fonts = [ "Iosevka" ]; } )
+    ];
+  };
 
   # Fix xdg.{dataHome,cacheHome} being empty in home-manager
   users.users.${config.my.username} = {
@@ -41,19 +50,20 @@ in
     expose-group-by-app = true;
     minimize-to-application = true;
     mru-spaces = false;
-    orientation = "right";
-    show-recents = false;
-    tilesize = 48;
+    orientation = "left";
+    show-recents = true;
+    tilesize = 32;
   };
 
   system.defaults.loginwindow = {
     # SHOWFULLNAME = false;
     GuestEnabled = false;
-    LoginwindowText = "Property of Nicolas Berbiche";
+    LoginwindowText = "Property of Ahmet Cemal Ozgezer";
     # DisableConsoleAccess = true;
   };
 
   system.defaults.NSGlobalDomain = {
+    _HIHideMenuBar = false;
     AppleKeyboardUIMode = 3;
     AppleShowAllExtensions = with config.system.defaults.finder;
       if isNull AppleShowAllExtensions then false else AppleShowAllExtensions;
@@ -69,10 +79,15 @@ in
     "com.apple.mouse.tapBehavior" = 1;
   };
 
+  system.keyboard = {
+    enableKeyMapping = true;
+    remapCapsLockToControl = true;
+  };
+
   system.activationScripts.preUserActivation.text = ''
-    mkdir -p ~/Screenshots
+    mkdir -p ~/Pictures/Screenshots
   '';
-  system.defaults.screencapture.location = "${config.users.users.${config.my.username}.home}/Screenshots";
+  system.defaults.screencapture.location = "${config.users.users.${config.my.username}.home}/Pictures/Screenshots";
 
   system.defaults.trackpad = {
     Clicking = true;

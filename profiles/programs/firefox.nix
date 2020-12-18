@@ -9,7 +9,7 @@ let
     icon = "firefox";
     cfg = {
       # Chromecast support through a native extension
-      enableFXCastBridge = true;
+      # enableFXCastBridge = true;
       # Browser extension to manage bookmarks
       enableBukubrow = true;
     };
@@ -183,6 +183,13 @@ lib.mkIf isLinux {
     enable = true;
     package = wrappedFirefox;
     enableAdobeFlash = false;
+    extensions = with pkgs.nur.repos.rycee.firefox-addons; [
+      darkreader
+      https-everywhere
+      # plasma-integration
+      privacy-badger
+      ublock-origin
+    ];
 
     profiles = {
       # Merged profiles
@@ -196,7 +203,11 @@ lib.mkIf isLinux {
         id = 2;
         path = "cn435xs5.default";
       };
-      job = makeProfile { id = 3; };
+      mbp = {
+        id = 3;
+        path = "dn435xs5.default";
+      };
+      job = makeProfile { id = 4; };
     };
   };
 }

@@ -19,7 +19,7 @@ in
     username = mkOption {
       type = types.str;
       description = "Primary user username";
-      example = "nicolas";
+      example = "ahmet";
       readOnly = true;
     };
     home = mkOption {

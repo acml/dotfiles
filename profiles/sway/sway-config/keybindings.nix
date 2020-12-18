@@ -12,7 +12,8 @@ let
 
   ws = lib.mapAttrs (_: lib.escapeShellArg) workspaces;
 
-  OUTPUT-LAPTOP = "eDP-1";
+  # OUTPUT-LAPTOP = "eDP-1";
+  OUTPUT-LAPTOP = "LVDS-1";
 
   # Sway's poor default to repeat the action continuously is dumb
   makeNoRepeat = lib.mapAttrs' (n: v:
@@ -153,6 +154,11 @@ lib.mkOptionDefault ((makeNoRepeat {
 })
 # Remove default keybindings
 // {
+  "${modifier}+Return"= null;
+  "${modifier}+Shift+c" = null;
+  "${modifier}+r" = null;
+  "${modifier}+Shift+e" = null;
+  "${modifier}+f"       = null;
   "${modifier}+Enter" = null;
   "${modifier}+1" = null;
   "${modifier}+2" = null;

@@ -8,6 +8,7 @@ let
       value = { 
         xkb_options = "ctrl:swapcaps,compose:ralt";
         xkb_layout = "us";
+        xkb_variant = "colemak";
         repeat_rate = defaultRepeatRate;
         repeat_delay = defaultRepeatDelay;
       };
@@ -40,7 +41,14 @@ shitty-keyboards // {
   "1241:521:USB-HID_Keyboard" = {
     xkb_options = "compose:ralt";
     xkb_layout = "us";
+    xkb_variant = "colemak";
     repeat_rate = defaultRepeatRate;
     repeat_delay = defaultRepeatDelay;
+  };
+
+  "type:keyboard" = {
+        xkb_options = "ctrl:swapcaps,compose:ralt";
+        xkb_layout = "us";
+        xkb_variant = "colemak";
   };
 }

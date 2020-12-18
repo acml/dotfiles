@@ -12,7 +12,7 @@ in
 {
   imports = configs;
 
-  profiles.dev.wakatime.enable = true;
+  profiles.dev.wakatime.enable = false;
 
   my.home = { config, pkgs, ... }: {
     home.sessionVariables = {
@@ -41,10 +41,10 @@ in
       exa fd fzf ripgrep hexyl tree bc bat
       procs sd dust tokei bandwhich bottom hyperfine
       htop ctop
-      docker-compose
+      # docker-compose
     ] ++ lib.optionals pkgs.stdenv.isLinux [
-      jetbrains.idea-community
-      insomnia
+      # jetbrains.idea-community
+      # insomnia
     ];
 
     # Preview directory content and find directory to `cd` to

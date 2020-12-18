@@ -19,16 +19,16 @@ in
     home.packages = with pkgs; lib.mkMerge [
       [
         ncdu
-        element-desktop
+        #element-desktop
         youtube-dl
       ]
       (lib.mkIf isLinux [
-        fractal
+        # fractal
         nwg-launchers
-        bitwarden bitwarden-cli
+        # bitwarden bitwarden-cli
         spotify
-        signal-desktop
-        chromium
+        # signal-desktop
+        # chromium
         libreoffice
       ])
       (lib.mkIf isDarwin [

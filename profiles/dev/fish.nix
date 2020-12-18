@@ -3,7 +3,7 @@
 {
   my.home = { config, ... }: {
     programs.fish = {
-      enable = true;
+      enable = false;
       shellAbbrs = {
         "..."  = "../../";
         "...." = "../../../";

@@ -62,8 +62,8 @@ lib.mkOptionDefault {
     Backslash = "exec ${getScript "volume.sh"} 'mic-mute";
     n   = Backslash;
     m   = "exec ${getScript "volume.sh"} 'toggle-mute'";
-    "." = "exec ${getScript "volume.sh"} 'decrease'";
-    "," = "exec ${getScript "volume.sh"} 'increase'";
+    #"." = "exec ${getScript "volume.sh"} 'decrease'";
+    #"," = "exec ${getScript "volume.sh"} 'increase'";
 
     Return = "mode default";
     Escape = "mode default";

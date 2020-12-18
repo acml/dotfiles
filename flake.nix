@@ -1,6 +1,6 @@
 {
   description =
-    "Nicolas Berbiche's poorly organized dotfiles and computer configuration";
+    "Ahmet Cemal Özgezer's dotfiles and computer configuration";
 
   inputs = {
     # This input I update less frequently
@@ -154,23 +154,28 @@
     nixosConfigurations = {
       merovingian = mkLinuxConfig {
         hostname = "merovingian";
-        username = "nicolas";
+        username = "ahmet";
+        platform = "x86_64-linux";
+      };
+      mbp = mkLinuxConfig {
+        hostname = "mbp";
+        username = "ahmet";
         platform = "x86_64-linux";
       };
       thixxos = mkLinuxConfig {
         hostname = "thixxos";
-        username = "nicolas";
+        username = "ahmet";
         platform = "x86_64-linux";
       };
     };
 
     darwinConfigurations = {
-      pc335 = mkDarwinConfig {
-        hostname = "PC335";
-        username = "n.berbiche";
+      Ahmets-MacBook-Pro = mkDarwinConfig {
+        hostname = "Ahmets-MacBook-Pro";
+        username = "ahmet";
         platform = "x86_64-darwin";
         hostConfiguration = ./host/macos.nix;
-        userConfiguration = ./user/nicolas.nix;
+        userConfiguration = ./user/ahmet.nix;
       };
     };
 

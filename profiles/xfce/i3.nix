@@ -43,7 +43,7 @@
         xfce4-popup-clipman = "${pkgs.xfce.xfce4-clipman-plugin}/bin/xfce4-popup-clipman";
 
         fixXkeyboard = pkgs.writeShellScript "fix-x-keyboard" ''
-          xset r rate 200 30
+          # xset r rate 200 30
           # setxkbmap -layout us -option ctrl:swapcaps,compose:ralt
         '';
         disableCompositing = pkgs.writeShellScript "disable-xfce-compositing" ''

@@ -4,7 +4,7 @@ let
   inherit (pkgs.stdenv.targetPlatform) isDarwin isLinux;
   # defaultFont = "DejaVu Sans Mono";
   # defaultFont = if isDarwin then "SFMono" else "Iosevka";
-  defaultFontSize = 13.0;
+  defaultFontSize = 11.0;
 in
 {
   my.home = { ... }: {
@@ -44,7 +44,7 @@ in
       font = let
         # These settings don't get merged because settings == types.attrs
         defaultFont = lib.mkMerge [
-          (lib.mkIf isDarwin "SFMono")
+          (lib.mkIf isDarwin "Menlo")
           (lib.mkIf (!isDarwin) "Iosevka")
         ];
       in {

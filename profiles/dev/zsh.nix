@@ -32,32 +32,36 @@ in
         COLORTERM = "truecolor";
       };
 
-      shellAliases = rec {
-        ".."      = "cd ..";
-        "..."     = "cd ../..";
-        "...."    = "cd ../../..";
-        "....."   = "cd ../../../..";
-        ls        = "${pkgs.exa}/bin/exa --color=auto --group-directories-first --classify";
-        lst       = "${ls} --tree";
-        la        = "${ls} --all";
-        ll        = "${ls} --all --long --header --group";
-        llt       = "${ll} --tree";
-        tree      = "${ls} --tree";
-        batnp     = "${pkgs.bat} --pager=''";
-        cdtemp    = "cd `mktemp -d`";
-        cp        = "cp -iv";
-        ln        = "ln -v";
-        mkdir     = "mkdir -vp";
-        mv        = "mv -iv";
-        rm        = "rm -Iv";
-        dh        = "du -h";
-        df        = "df -h";
-        su        = "sudo -E su -m";
-        systemctl = "command systemctl --no-pager --full";
-        sysu      = "${systemctl} --user";
-        jnsu      = "journalctl --user";
-        svim      = "sudoedit";
-      };
+      shellAliases = lib.mkMerge [
+        rec {
+          ".."      = "cd ..";
+          "..."     = "cd ../..";
+          "...."    = "cd ../../..";
+          "....."   = "cd ../../../..";
+          ls        = "${pkgs.exa}/bin/exa --color=auto --group-directories-first --classify";
+          lst       = "${ls} --tree";
+          la        = "${ls} --all";
+          ll        = "${ls} --all --long --header --group";
+          llt       = "${ll} --tree";
+          tree      = "${ls} --tree";
+          batnp     = "${pkgs.bat} --pager=''";
+          cdtemp    = "cd `mktemp -d`";
+          cp        = "cp -iv";
+          ln        = "ln -v";
+          mkdir     = "mkdir -vp";
+          mv        = "mv -iv";
+          rm        = "rm -Iv";
+          dh        = "du -h";
+          df        = "df -h";
+          su        = "sudo -E su -m";
+          svim      = "sudoedit";
+        }
+        (lib.optionalAttrs isLinux rec {
+          systemctl = "command systemctl --no-pager --full";
+          sysu      = "${systemctl} --user";
+          jnsu      = "journalctl --user";
+        })
+      ];
 
       initExtra = ''
         setopt incappendhistory

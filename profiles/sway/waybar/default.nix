@@ -8,6 +8,7 @@ let
     output = [
       # "eDP-1",
       # "Dell Inc. DELL U3219Q F9WNWP2",
+      "LVDS-1"
       "DP-2"
       "DP-4"
       "DP-5"

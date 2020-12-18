@@ -5,22 +5,22 @@
     imports = [ ./systemd.nix ];
 
     home.packages = with pkgs; [
-      pavucontrol # Audio software
-      playerctl # control MPRIS players
-      libnotify # `notify-send` notifications to test mako
-      dex # execute .desktop files
+      # pavucontrol # Audio software
+      # playerctl # control MPRIS players
+      # libnotify # `notify-send` notifications to test mako
+      # dex # execute .desktop files
 
-      ffmpeg
+      # ffmpeg
 
       # Programs
-      gnome3.nautilus # Gnome file manager
-      gnome3.networkmanager-openconnect # OpenConnect plugin for NetworkManager
-      gnome3.rhythmbox # Gnome music player
-      gnome3.eog # Gnome image viewer
-      gnome3.seahorse # Gnome Keyring secret management
+      # gnome3.nautilus # Gnome file manager
+      # gnome3.networkmanager-openconnect # OpenConnect plugin for NetworkManager
+      # gnome3.rhythmbox # Gnome music player
+      # gnome3.eog # Gnome image viewer
+      # gnome3.seahorse # Gnome Keyring secret management
 
       # Virtualization software
-      gnome3.gnome-boxes
+      # gnome3.gnome-boxes
       # virt-manager
     ];
 

@@ -6,7 +6,7 @@
       enable = true;
       backend = "glx";
       experimentalBackends = true;
-      vSync = false;
+      vSync = true;
       fade = true;
       shadow = false;
       # These were copied from some website (which one ??)
