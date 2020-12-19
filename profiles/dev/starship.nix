@@ -4,116 +4,38 @@
   my.home = { ... }: {
     programs.starship = {
       enable = true;
-      enableZshIntegration = true;
-
       settings = {
-        add_newline = false;
-        format = lib.concatStrings [
-          # "$username:$hostname "
-          # "$hostname "
-          "$directory"
-          # "$kubernetes"
-          "$git_branch"
-          "$git_status"
-          # "$git_commit"
-          #"$git_status"
-          "$git_state"
-          # "$hg_branch"
-          # "$docker_context"
-          "$package"
-          # "dotnet"
-          # "$elixir"
-          # "elm"
-          # "$erlang"
-          # "$golang"
-          # "$haskell"
-          # "$java"
-          # "julia"
-          # "$nodejs"
-          # "ocaml"
-          # "php"
-          # "purescript"
-          # "$python"
-          # "ruby"
-          # "$rust"
-          # "$terraform"
-          # "zig"
-          "$nix_shell"
-          # "conda"
-          # "memory_usage"
-          # "aws"
-          # "gcloud"
-          # "env_var"
-          # "crystal"
-          # "$cmd_duration"
-          # "custom"
-          # "$line_break"
-          "$jobs"
-          # "$directory"
-          # "$time"
-          "$status"
-          "$character"
-        ];
-
-        character = {
-          error_symbol = ''[\$](bold red)'';
-          success_symbol = ''[\$](bold green)'';
-        };
-
-        cmd_duration.disable = true;
-
-        directory = {
-          truncation_length = 1;
-          truncate_to_repo = false;
-          read_only = "";
-          fish_style_pwd_dir_length = 1;
-        };
-
-        git_branch = {
-          symbol = "";
-          only_attached = true;
-          truncation_length = 12;
-          format = "([$symbol$branch]($style) )";
-        };
-
-        git_status = {
-          format = "([\\[$conflicted$deleted$modified$untracked$ahead_behind\\]]($style) )";
-          untracked = "$count?";
-          modified = "$count!";
-          deleted = "$count✘";
-        };
-
-        hostname = {
-          ssh_only = false;
-          format = "[$hostname]($style)";
-        };
-
-        line_break.disabled = false;
-
-        nix_shell = {
-          use_name = false;
-          impure_msg = "";
-          pure_msg = "";
-          symbol = "❄️";
-        };
-
-        status = {
-          disabled = false;
-          symbol = "";
-        };
-
-        time = {
-          disabled = false;
-          time_format = "%H:%M";
-          format = "[\\[$time\\]]($style) ";
-        };
-
-        username = {
-          disabled = false;
-          show_always = true;
-          format = "[$user]($style)";
-        };
+        # aws.disabled = true;
+        # battery.disabled = true;
+        # cmd_duration.disabled = true;
+        # conda.disabled = true;
+        # dotnet.disabled = true;
+        # env_var.disabled = true;
+        # git_branch.disabled = true;
+        # git_commit.disabled = true;
+        # git_state.disabled = true;
+        git_status.disabled = true;
+        # golang.disabled = true;
+        # hg_branch.disabled = true;
+        java.disabled = true;
+        # kubernetes.disabled = true;
+        # memory_usage.disabled = true;
+        # nodejs.disabled = true;
+        # package.disabled = true;
+        # php.disabled = true;
+        # python.disabled = true;
+        # ruby.disabled = true;
+        # rust.disabled = true;
+        # terraform.disabled = true;
+        # time.disabled = true;
       };
     };
+
+    programs.zsh.initExtra = ''
+      if [[ $TERM != "dumb" && (-z $INSIDE_EMACS || $INSIDE_EMACS == "vterm") ]]; then
+        eval "$(${pkgs.starship}/bin/starship init zsh)"
+      fi
+      '';
+
   };
 }
