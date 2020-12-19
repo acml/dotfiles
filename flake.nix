@@ -216,20 +216,6 @@
             experimental-features = nix-command flakes
           '';
         in "${nixConf}/etc";
-
-        shellHook = ''
-          export NIX_PATH="$NIX_PATH:darwin=${inputs.nix-darwin}"
-
-          rebuild () {
-            # _NIXOS_REBUILD_REEXEC is necessary to force nixos-rebuild to use the nix binary in $PATH
-            # otherwise the initial installation would fail
-            sudo --preserve-env=PATH --preserve-env=NIX_CONF_DIR _NIXOS_REBUILD_REEXEC=1 \
-              nixos-rebuild "$@"
-          }
-          drebuild () {
-              darwin-rebuild switch --flake '.#Ahmets-MacBook-Pro' -v "$@"
-          }
-        '';
       });
   };
 }

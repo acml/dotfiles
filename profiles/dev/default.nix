@@ -55,12 +55,15 @@ in
     };
 
     # ctrl-t, ctrl-r, kill <tab><tab>
-    programs.fzf = {
+    # enhances zsh (C-r: history search C-t: file search M-c: change directory)
+    programs.skim = {
       enable = true;
-      enableZshIntegration = true;
-      defaultCommand = ''${pkgs.fd}/bin/fd --follow --type f --exclude="'.git'" .'';
-      defaultOptions = [ "--exact" "--cycle" "--layout=reverse" ];
-      # enableFishIntegration = true;
+      defaultCommand = "${pkgs.fd}/bin/fd -L -tf";
+      defaultOptions = [ "--height 100%" "--prompt ⟫" "--bind '?:toggle-preview,ctrl-o:execute-silent(xdg-open {})'"];
+      fileWidgetCommand = "${pkgs.fd}/bin/fd -L -tf";
+      fileWidgetOptions = [ "--preview '${pkgs.bat}/bin/bat --color=always --style=header,grid,numbers --line-range :300 {}'" ];
+      changeDirWidgetCommand = "${pkgs.fd}/bin/fd -L -td";
+      changeDirWidgetOptions = [ "--preview '${pkgs.tree}/bin/tree -C {} | head -200'" ];
     };
 
     programs.mcfly = {
