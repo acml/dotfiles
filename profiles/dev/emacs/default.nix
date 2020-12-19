@@ -34,6 +34,9 @@ lib.mkMerge [
           extraConfig = ''
             (setq ispell-program-name "aspell")
             (setq ispell-dictionary "english")
+            ${lib.optionalString isDarwin ''
+              (setq insert-directory-program "gls")
+            ''}
             ${lib.optionalString enableWakaTime ''
               (global-wakatime-mode t)
               (setq wakatime-cli-path "${pkgs.wakatime}/bin/wakatime")
@@ -44,6 +47,7 @@ lib.mkMerge [
         programs.zsh.initExtra = builtins.readFile ./emacs-vterm-zsh.sh;
 
         home.packages = with pkgs; [
+          (lib.mkIf isDarwin coreutils-prefixed)
           ## Doom dependencies
           global
           (ripgrep.override { withPCRE2 = true; })
