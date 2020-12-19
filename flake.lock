@@ -2,32 +2,16 @@
   "nodes": {
     "cachix": {
       "locked": {
-        "lastModified": 1606086654,
-        "narHash": "sha256-VFl+3eGIMqNp7cyOMJ6TjM/+UcsLKtodKoYexrlTJMI=",
+        "lastModified": 1608062904,
+        "narHash": "sha256-QVaxOnGwZoBtNTlnAV0aeC30ASeJpo583wjotmhpOtg=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "19db3e5ea2777daa874563b5986288151f502e27",
+        "rev": "647cc06986c1ae4a2bb05298e0cf598723e42970",
         "type": "github"
       },
       "original": {
         "owner": "nixos",
         "ref": "nixos-20.09",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
-    "cmpkgs": {
-      "locked": {
-        "lastModified": 1606389506,
-        "narHash": "sha256-l1q6vU5811XxLM42XHEpcCPFSx0m3XqPnoMzgpYBzIA=",
-        "owner": "colemickens",
-        "repo": "nixpkgs",
-        "rev": "ad6d66959a8c3901d65b71055b9fe4c395566baf",
-        "type": "github"
-      },
-      "original": {
-        "owner": "colemickens",
-        "ref": "cmpkgs",
         "repo": "nixpkgs",
         "type": "github"
       }
@@ -313,17 +297,17 @@
     "nixpkgs-wayland": {
       "inputs": {
         "cachix": "cachix",
-        "cmpkgs": "cmpkgs",
         "nixpkgs": [
           "nixpkgs"
-        ]
+        ],
+        "unstableSmall": "unstableSmall"
       },
       "locked": {
-        "lastModified": 1606403387,
-        "narHash": "sha256-lRCpMQPnbs678XgOEszgLxQaE/W3G5NqVGERGKUxy80=",
+        "lastModified": 1608336536,
+        "narHash": "sha256-6A9GVtkymgPdBXdq5+aupaGcCxjO7/nHKc+9W4456Zw=",
         "owner": "colemickens",
         "repo": "nixpkgs-wayland",
-        "rev": "2af293d995912fb2c5616032ac14548a8c204265",
+        "rev": "7b41147e2fde2c438bebc8eba60744ea3e7db0e3",
         "type": "github"
       },
       "original": {
@@ -505,6 +489,22 @@
       "original": {
         "owner": "debug-ito",
         "repo": "rotate-text.el",
+        "type": "github"
+      }
+    },
+    "unstableSmall": {
+      "locked": {
+        "lastModified": 1608306277,
+        "narHash": "sha256-srCl7TU3lbZufhhrEhSnWz2p5gt/MHdtiWSCMOA8sow=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "9e6737710c4fb2613850e699178b23d54f1a3261",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable-small",
+        "repo": "nixpkgs",
         "type": "github"
       }
     },
