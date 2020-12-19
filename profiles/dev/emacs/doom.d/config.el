@@ -248,6 +248,14 @@
              (setq-local left-fringe-width 8
                          right-fringe-width 8)))
 
+;;; :tools magit
+(setq magit-repository-directories '(("~/Projects" . 2))
+      magit-save-repository-buffers nil
+      ;; Don't restore the wconf after quitting magit, it's jarring
+      magit-inhibit-save-previous-winconf t
+      transient-values '((magit-rebase "--autosquash")
+                         (magit-pull "--rebase")))
+
 (use-package! turkish
   :commands (turkish-mode)
   ;; :init (evil-leader/set-key (kbd "ot") 'turkish-mode)
