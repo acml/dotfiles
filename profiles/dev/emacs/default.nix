@@ -32,7 +32,8 @@ lib.mkMerge [
           ];
           emacsPackagesOverlay = overrides;
           extraConfig = ''
-            (setq ispell-program-name "hunspell")
+            (setq ispell-program-name "aspell")
+            (setq ispell-dictionary "english")
             ${lib.optionalString enableWakaTime ''
               (global-wakatime-mode t)
               (setq wakatime-cli-path "${pkgs.wakatime}/bin/wakatime")
