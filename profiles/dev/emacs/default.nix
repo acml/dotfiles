@@ -75,6 +75,7 @@ lib.mkMerge [
           ccls
           (lib.mkIf isLinux glslang)
           # :lang go
+          go
           gocode
           gomodifytags
           gotests
