@@ -26,7 +26,7 @@ in
       mouse_action2       = "resize";
       mouse_drop_action   = "stack";
 
-      window_topmost      = true;
+      window_topmost      = false;
       window_opacity      = false;
       window_shadow       = true;
       split_ratio         = 0.5;
@@ -50,6 +50,7 @@ in
     extraConfig = ''
       yabai -m rule --add app='^System Preferences$' manage=off
       yabai -m rule --add app="^Digital Colou?r Meter$" sticky=on
+      yabai -m rule --add app="emacs" manage="on"
 
       echo "Yabai configuration loaded"
     '';
