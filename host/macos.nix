@@ -12,8 +12,8 @@ in
   system.stateVersion = 4;
 
   nix = {
-    useSandbox = true;
-    sandboxPaths = [ "/System/Library/Frameworks" "/System/Library/PrivateFrameworks" "/usr/lib" "/private/tmp" "/private/var/tmp" "/usr/bin/env" ];
+    useSandbox = false;
+    # sandboxPaths = [ "/System/Library/Frameworks" "/System/Library/PrivateFrameworks" "/usr/lib" "/private/tmp" "/private/var/tmp" "/usr/bin/env" ];
     trustedUsers = [ "@admin" ];
   };
 
