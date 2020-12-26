@@ -19,6 +19,13 @@ let
 in
 lib.mkMerge [
   {
+    environment.variables.EDITOR = "emacsclient -tc";
+    environment.variables.ALTERNATE_EDITOR = "emacs";
+    environment.shellAliases = {
+      vim = "emacsclient -nw";
+      e   = "emacsclient -nw";
+    };
+
     my.home = lib.mkMerge [
       { imports = [ inputs.doom-emacs.hmModule ]; }
       {

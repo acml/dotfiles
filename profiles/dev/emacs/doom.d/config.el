@@ -42,6 +42,8 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+;; Set initial position
+(setq frame-resize-pixelwise t)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;

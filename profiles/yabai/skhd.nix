@@ -29,6 +29,7 @@ let
     terminal = "${alacritty} --working-directory $HOME";
 
     alacritty = "${pkgs.alacritty}/bin/alacritty";
+    emacs = "emacsclient -a '' -nc";
   };
 
   # Helpers
@@ -56,6 +57,7 @@ in
   services.skhd.skhdConfig = ''
     # Open terminal
     ${mod} - return : ${binaries.terminal}
+    ${mod} + ${sec} - return : ${binaries.emacs}
 
     # Close focus window
     shift + ${mod} - d : ${window "--close"}
