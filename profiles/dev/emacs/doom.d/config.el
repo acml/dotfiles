@@ -294,52 +294,47 @@
    :compile "make O=am43xx_evm ARCH=arm CROSS_COMPILE=arm-openwrt-linux-gnueabi- all"
    :compilation-dir "."))
 
-(defmacro modus-themes-format-sexp (sexp &rest objects)
-  `(eval (read (format ,(format "%S" sexp) ,@objects))))
+(use-package! modus-themes
+  :init
+  ;; Set customization options to values of your choice
+  (setq modus-themes-slanted-constructs t
+        modus-themes-bold-constructs t
+        modus-themes-fringes nil ; {nil,'subtle,'intense}
+        modus-themes-mode-line '3d ; {nil,'3d,'moody}
+        modus-themes-syntax nil ; Lots of options---continue reading the manual
+        modus-themes-intense-hl-line nil
+        modus-themes-paren-match nil ; {nil,'subtle-bold,'intense,'intense-bold}
+        modus-themes-links 'neutral-underline ; Lots of options---continue reading the manual
+        modus-themes-no-mixed-fonts nil
+        modus-themes-prompts 'subtle ; {nil,'subtle,'intense}
+        modus-themes-completions 'opinionated ; {nil,'moderate,'opinionated}
+        modus-themes-region 'bg-only-no-extend ; {nil,'no-extend,'bg-only,'bg-only-no-extend}
+        modus-themes-diffs 'desaturated ; {nil,'desaturated,'fg-only,'bg-only}
+        modus-themes-org-blocks nil ; {nil,'grayscale,'rainbow}
+        modus-themes-org-habit 'traffic-light ; {nil,'simplified,'traffic-light}
+        modus-themes-headings ; Lots of options---continue reading the manual
+        '((1 . section)
+          (2 . section-no-bold)
+          (3 . rainbow-line)
+          (t . rainbow-line-no-bold))
+        modus-themes-variable-pitch-headings nil
+        modus-themes-scale-headings nil
+        modus-themes-scale-1 1.1
+        modus-themes-scale-2 1.15
+        modus-themes-scale-3 1.21
+        modus-themes-scale-4 1.27
+        modus-themes-scale-5 1.33)
 
-(dolist (theme '("operandi" "vivendi"))
-  (modus-themes-format-sexp
-   (defun modus-%1$s-theme-load ()
-     (setq modus-%1$s-theme-slanted-constructs t
-           modus-%1$s-theme-bold-constructs t
-           modus-%1$s-theme-fringes nil ; {nil,'subtle,'intense}
-           modus-%1$s-theme-mode-line '3d ; {nil,'3d,'moody}
-           modus-%1$s-theme-syntax 'alt-syntax-yellow-comments ; {nil,faint,'yellow-comments,'green-strings,'yellow-comments-green-strings,'alt-syntax,'alt-syntax-yellow-comments}
-           modus-%1$s-theme-intense-hl-line nil
-           modus-%1$s-theme-intense-paren-match nil
-           modus-%1$s-theme-links 'no-underline ; {nil,'faint,'neutral-underline,'faint-neutral-underline,'no-underline}
-           modus-%1$s-theme-no-mixed-fonts nil
-           modus-%1$s-theme-prompts 'subtle ; {nil,'subtle,'intense}
-           modus-%1$s-theme-completions 'moderate ; {nil,'moderate,'opinionated}
-           modus-%1$s-theme-diffs 'desaturated ; {nil,'desaturated,'fg-only}
-           modus-%1$s-theme-org-blocks 'greyscale ; {nil,'greyscale,'rainbow}
-           modus-%1$s-theme-headings  ; Read further below in the manual for this one
-           '(;; (1 . rainbow)
-             ;; (2 . rainbow-highlight)
-             (t . highlight))
-           modus-%1$s-theme-variable-pitch-headings t
-           modus-%1$s-theme-scale-headings t
-           modus-%1$s-theme-scale-1 1.1
-           modus-%1$s-theme-scale-2 1.15
-           modus-%1$s-theme-scale-3 1.21
-           modus-%1$s-theme-scale-4 1.27
-           modus-%1$s-theme-scale-5 1.33)
-     (load-theme 'modus-%1$s t))
-   theme))
+  ;; Enable the theme files
+  (use-package modus-operandi-theme)
+  (use-package modus-vivendi-theme)
 
-(defun modus-themes-toggle ()
-  "Toggle between `modus-operandi' and `modus-vivendi' themes."
-  (interactive)
-  (if (eq (car custom-enabled-themes) 'modus-operandi)
-      (progn
-        (disable-theme 'modus-operandi)
-        (modus-vivendi-theme-load))
-    (disable-theme 'modus-vivendi)
-    (modus-operandi-theme-load)))
-
-(use-package! modus-operandi-theme
   :config
-  (modus-operandi-theme-load))
+  ;; Load the theme of your choice
+  (modus-themes-load-operandi)
+  ;; ;; OR
+  ;; (load-theme 'modus-operandi t)
+  :bind ("<f5>" . modus-themes-toggle))
 
 (use-package! rainbow-mode
   :hook

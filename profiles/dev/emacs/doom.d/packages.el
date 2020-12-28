@@ -72,8 +72,7 @@
 (package! highlight-parentheses)
 (package! journalctl-mode)
 
-(package! modus-operandi-theme)
-(package! modus-vivendi-theme)
+(package! modus-themes)
 
 ;; (package! shrface :recipe (:host github :repo "chenyanming/shrface"))
 
