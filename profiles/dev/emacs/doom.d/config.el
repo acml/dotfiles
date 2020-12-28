@@ -221,6 +221,20 @@
 (use-package! docker-tramp)
 (use-package! docker)
 
+(use-package! edit-server
+  :if (daemonp)
+  :defer 10
+  :config
+  (setq edit-server-new-frame nil)
+  (setq edit-server-url-major-mode-alist
+        '(("reddit\\.com" . markdown-mode)
+          ("github\\.com" . gfm-mode)
+          ("gitlab\\.com" . gfm-mode)
+          ("gitlab\\.paesslergmbh\\.de" . gfm-mode)
+          ("lab\\.ebenefuenf\\.com" . gfm-mode)
+          ("jira.paesslergmbh.de" . jira-markup-mode)))
+  (edit-server-start))
+
 (use-package! highlight-parentheses
     :defer t
     :init

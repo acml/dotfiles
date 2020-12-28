@@ -68,6 +68,7 @@
 
 (package! docker)
 (package! docker-tramp)
+(package! edit-server)
 
 (package! highlight-parentheses)
 (package! journalctl-mode)
