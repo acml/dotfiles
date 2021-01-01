@@ -1,23 +1,8 @@
-{ config, lib, pkgs, rootPath, ... }:
+{ config, options, lib, pkgs, rootPath, ... }:
 # rootPath is a custom input injected in Flake.nix
 
 let
   inherit (config.lib.my) callWithDefaults;
-
-  mkSwaybar = { outputs, id ? null }: {
-    id = id;
-    position = "top";
-    mode = "dock";
-    statusCommand = "while date +'%Y-%m-%d %l:%M:%S %p'; do sleep 1; done";
-    trayOutput = "none";
-    fonts = [ "FontAwesome 10" "Terminus 10" ];
-    colors = {
-      statusline = "#FFFFFF";
-      background = "#323232";
-      inactiveWorkspace = { border = "#000000"; background = "#5c5c5c"; text = "#FFFFFF"; };
-    };
-    extraConfig = lib.concatMapStringsSep "\n" (x: "output \"${x}\"") outputs;
-  };
 
   mkCommand = commands: lib.concatStringsSep "; \\\n" commands;
 
@@ -41,13 +26,8 @@ let
     command = "mark \"_social_${name}\"";
   };
 
-  # Primary outputs
-  OUTPUT-HOME-DELL-RIGHT = "Dell Inc. DELL U2414H R9F1P56N68VL";
-  OUTPUT-HOME-DELL-LEFT  = "Dell Inc. DELL U2414H R9F1P55S45FL";
-  OUTPUT-HOME-BENQ = "Unknown BenQ EW3270U 74J08749019";
   OUTPUT-HOME-DELL = "Dell Inc. DELL U3219Q F9WNWP2";
-  #OUTPUT-LAPTOP = "eDP-1";
-  OUTPUT-LAPTOP = "LVDS-1";
+  OUTPUT-LAPTOP = "eDP-1";
 
   # Sway variables
   imageFolder = toString config.programs.swaylock.imageFolder;
@@ -63,7 +43,7 @@ let
     '';
     browser-private = "${browser} --private-window";
     browser-work-profile = "${browser} -P job";
-    lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/3840x2160.png";
+    lock = "${swaylock} -f -c 0f0f0ff0 -i ${imageFolder}/current";
     logout-menu = "${wlogout}";
     audiocontrol = "${pavucontrol}";
     menu = "${nwggrid} -n 10 -fp -b 121212E0";
@@ -86,36 +66,39 @@ let
     # swaymsg = "${config.wayland.windowManager.sway.package}/bin/swaymsg";
     swaymsg = "${pkgs.sway}/bin/swaymsg";
     wl-paste = "${pkgs.wl-clipboard}/bin/wl-paste";
-    wlogout = "${pkgs.wlogout}/bin/wlogout";
+    wlogout = "${pkgs.wlogout}/bin/wlogout -p layer-shell";
     wofi = "${pkgs.wofi}/bin/wofi";
     xfce4-appfinder = "${pkgs.xfce.xfce4-appfinder}/bin/xfce4-appfinder";
   };
 
+  # Number at the start is used for ordering
+  # https://github.com/Alexays/Waybar/blob/f233d27b782c04ef128e3d71ec32a0b2ce02df39/src/modules/sway/workspaces.cpp#L351-L357
   workspaces = {
-    WS1 = "1: browsing";
-    WS2 = "2: school";
-    WS3 = "3: dev";
-    WS4 = "4: sysadmin";
-    WS5 = "5: gaming";
-    WS6 = "6: movie";
-    WS7 = "7: social";
-    WS8 = "8: random";
-    WS9 = "9: random";
-    WS10 = "10: random";
+    WS1 = "1:"; #browsing
+    WS2 = "2:school";
+    WS3 = "3:"; #dev
+    WS4 = "4:"; #sysadmin
+    WS5 = "5:gaming";
+    WS6 = "6:movie";
+    WS7 = "7:"; #social
+    WS8 = "8";
+    WS9 = "9";
+    WS10 = "10";
   };
 
   extraConfig = with workspaces; let
     makeCommand = (i: x: "exec_always ${binaries.swaymsg} rename workspace number ${toString i} to '${x}'");
-    workspaces = [ WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10 ];
+    workspaces = [ WS1 WS2 WS3 WS4 WS5 WS6 WS7 WS8 WS9 WS10 ]; # Lexical ordering...
   in ''
     ${lib.concatImapStringsSep "\n" (makeCommand) workspaces}
 
-    hide_edge_borders --i3 smart_no_gaps
+    # hide_edge_borders --i3 smart_no_gaps
+    hide_edge_borders --i3 vertical
 
     # Set default workspace outputs
-    workspace "${WS5}" output "${OUTPUT-HOME-DELL}" "${OUTPUT-HOME-BENQ}" "${OUTPUT-LAPTOP}"
-    workspace "${WS6}" output "${OUTPUT-HOME-DELL}" "${OUTPUT-HOME-BENQ}" "${OUTPUT-LAPTOP}"
-    workspace "${WS7}" output "${OUTPUT-HOME-DELL-RIGHT}" "${OUTPUT-HOME-DELL-LEFT}" "${OUTPUT-HOME-BENQ}"
+    workspace "${WS5}" output "${OUTPUT-HOME-DELL}"
+    workspace "${WS6}" output "${OUTPUT-HOME-DELL}"
+    # workspace "${WS7}" output ""
 
     # Enable/Disable the output when closing the lid (e.g. when using a dock)
     bindswitch --locked lid:on  output ${OUTPUT-LAPTOP} disable
@@ -136,13 +119,13 @@ let
     focus.newWindow = "focus";
     gaps = {
       inner = 5;
-      smartGaps = true;
-      smartBorders = "no_gaps";
+      smartGaps = false; # Always display gaps
+      smartBorders = "on"; # Hide borders even with gaps
       # Following option needs to be set in extraConfig
       # window.hideEdgeBorders = "smart_no_gaps";
     };
     window = {
-      titlebar = true;
+      titlebar = false;
       border = 3;
     };
     floating = {
@@ -153,7 +136,7 @@ let
     workspaceAutoBackAndForth = false;
 
     output = {
-      "*" = { bg = "${imageFolder}/3840x2160.png center"; };
+      "*" = { bg = "${imageFolder}/current center"; };
       "eDP-1" = {
         mode = "3840x2160@60Hz";
         scale_filter = "smart";
@@ -177,7 +160,7 @@ let
     ];
 
     keybindings = callWithDefaults ./keybindings.nix {
-      inherit config binaries rootPath workspaces;
+      inherit config binaries options rootPath workspaces;
     };
 
     modes = callWithDefaults ./modes.nix {
@@ -188,7 +171,7 @@ let
     assigns = {
       # Games related
       "'${WS5}'" = [
-        { instance = "Steam"; }
+        { instance = "Steam"; } { app_id = "steam"; }
         { app_id = "lutris"; }
       ];
       # Movie related stuff
@@ -215,6 +198,7 @@ let
         { app_id = "^launcher$"; }
         { app_id = "xfce4-appfinder"; }
         { instance = "xfce4-appfinder"; }
+        { app_id = "zenity"; }
       ])
       (mkFloatingNoBorder {
         criteria = { app_id = "blueman-manager"; };

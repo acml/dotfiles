@@ -1,4 +1,4 @@
-{ config, pkgs, lib, binaries, rootPath, workspaces }:
+{ config, options, pkgs, lib, binaries, rootPath, workspaces }:
 
 let
   inherit (config.wayland.windowManager.sway.config)
@@ -8,23 +8,32 @@ let
     up
     down;
 
+  # This is a terrible idea, but I know what I'm doing
+  # I want to reuse the default keybindings while overriding the default flags
+  # passed to Sway's `bindsym`. See `makeNoRepeat`.
+  defaultKeybindings = let
+    # these variable names have no meanings
+    md = lib.head options.wayland.windowManager.sway.config.type.functor.wrapped.functor.payload.modules; 
+    kb = (lib.head md.imports).options.keybindings.default;
+  in assert builtins.isAttrs kb; kb;
+
   inherit (config.lib.my) getScript;
 
   ws = lib.mapAttrs (_: lib.escapeShellArg) workspaces;
 
-  # OUTPUT-LAPTOP = "eDP-1";
-  OUTPUT-LAPTOP = "LVDS-1";
+  OUTPUT-LAPTOP = "eDP-1";
 
   # Sway's poor default to repeat the action continuously is dumb
   makeNoRepeat = lib.mapAttrs' (n: v:
+    let default = "--no-warn ${n}"; in
     lib.nameValuePair
-      (if v ? repeat then n else "--no-repeat ${n}")
+      (if v ? repeat then default else "--no-repeat ${default}")
       (v.repeat or v)
   );
   # Marks a keybinding as being repeatable (holding the key will trigger the action continuously)
   makeRepeatable = n: { repeat = n; };
 in
-lib.mkOptionDefault ((makeNoRepeat {
+makeNoRepeat (defaultKeybindings // {
   # Some defaults from Sway are included for the sake of self documentation
   "${modifier}+Return"       = "exec ${binaries.terminal}";
   "${modifier}+Shift+Return" = "exec ${binaries.floating-term}";
@@ -47,7 +56,7 @@ lib.mkOptionDefault ((makeNoRepeat {
   "--locked ${modifier}+Shift+F12" = "output ${OUTPUT-LAPTOP} toggle";
 
   # Disable defaults (either with a noop or unbind)
-  "${modifier}+Shift+e" = "noop";
+  "${modifier}+Shift+e" = null;
 
   # Pasting (might not work)
   "--release Shift+Insert" = "exec '${binaries.wl-paste} --primary'";
@@ -105,6 +114,7 @@ lib.mkOptionDefault ((makeNoRepeat {
   # Switch focus on workspaces
   "${modifier}+u"       = makeRepeatable "workspace back_and_forth";
   "${modifier}+Shift+u" = "move container to workspace back_and_forth";
+  "${modifier}+Ctrl+u"  = "move container to workspace back_and_forth; workspace back_and_forth";
 
   # Move workspace to other screens
   "${modifier}+Shift+w" = "exec alacritty --class 'floating-term' --command bash '${getScript "sway_move_workspace_to_screen.sh"}'";
@@ -118,18 +128,19 @@ lib.mkOptionDefault ((makeNoRepeat {
   "${modifier}+z"       = "focus child";
   "${modifier}+Shift+z" = "focus parent";
   "${modifier}+Shift+s" = "sticky toggle";
+  "${modifier}+c"       = "border toggle";
 
-  # Sway pick-ups the workspace names with "workspace ${name}"...
-  "${modifier}+1"       = "workspace ${ws.WS1}";
-  "${modifier}+2"       = "workspace ${ws.WS2}";
-  "${modifier}+3"       = "workspace ${ws.WS3}";
-  "${modifier}+4"       = "workspace ${ws.WS4}";
-  "${modifier}+5"       = "workspace ${ws.WS5}";
-  "${modifier}+6"       = "workspace ${ws.WS6}";
-  "${modifier}+7"       = "workspace ${ws.WS7}";
-  "${modifier}+8"       = "workspace ${ws.WS8}";
-  "${modifier}+9"       = "workspace ${ws.WS9}";
-  "${modifier}+0"       = "workspace ${ws.WS10}";
+  "${modifier}+1" = "workspace ${ws.WS1}";
+  "${modifier}+2" = "workspace ${ws.WS2}";
+  "${modifier}+3" = "workspace ${ws.WS3}";
+  "${modifier}+4" = "workspace ${ws.WS4}";
+  "${modifier}+5" = "workspace ${ws.WS5}";
+  "${modifier}+6" = "workspace ${ws.WS6}";
+  "${modifier}+7" = "workspace ${ws.WS7}";
+  "${modifier}+8" = "workspace ${ws.WS8}";
+  "${modifier}+9" = "workspace ${ws.WS9}";
+  "${modifier}+0" = "workspace ${ws.WS10}";
+  # Move container
   "${modifier}+Shift+1" = "move container to workspace ${ws.WS1}";
   "${modifier}+Shift+2" = "move container to workspace ${ws.WS2}";
   "${modifier}+Shift+3" = "move container to workspace ${ws.WS3}";
@@ -141,53 +152,14 @@ lib.mkOptionDefault ((makeNoRepeat {
   "${modifier}+Shift+9" = "move container to workspace ${ws.WS9}";
   "${modifier}+Shift+0" = "move container to workspace ${ws.WS10}";
   # Move container and focus
-  "${modifier}+Ctrl+1"  = "move container to workspace ${ws.WS1};  workspace number 1";
-  "${modifier}+Ctrl+2"  = "move container to workspace ${ws.WS2};  workspace number 2";
-  "${modifier}+Ctrl+3"  = "move container to workspace ${ws.WS3};  workspace number 3";
-  "${modifier}+Ctrl+4"  = "move container to workspace ${ws.WS4};  workspace number 4";
-  "${modifier}+Ctrl+5"  = "move container to workspace ${ws.WS5};  workspace number 5";
-  "${modifier}+Ctrl+6"  = "move container to workspace ${ws.WS6};  workspace number 6";
-  "${modifier}+Ctrl+7"  = "move container to workspace ${ws.WS7};  workspace number 7";
-  "${modifier}+Ctrl+8"  = "move container to workspace ${ws.WS8};  workspace number 8";
-  "${modifier}+Ctrl+9"  = "move container to workspace ${ws.WS9};  workspace number 9";
-  "${modifier}+Ctrl+0"  = "move container to workspace ${ws.WS10}; workspace number 10";
-})
-# Remove default keybindings
-// {
-  "${modifier}+Return"= null;
-  "${modifier}+Shift+c" = null;
-  "${modifier}+r" = null;
-  "${modifier}+Shift+e" = null;
-  "${modifier}+f"       = null;
-  "${modifier}+Enter" = null;
-  "${modifier}+1" = null;
-  "${modifier}+2" = null;
-  "${modifier}+3" = null;
-  "${modifier}+4" = null;
-  "${modifier}+5" = null;
-  "${modifier}+6" = null;
-  "${modifier}+7" = null;
-  "${modifier}+8" = null;
-  "${modifier}+9" = null;
-  "${modifier}+0" = null;
-  "${modifier}+Shift+1" = null;
-  "${modifier}+Shift+2" = null;
-  "${modifier}+Shift+3" = null;
-  "${modifier}+Shift+4" = null;
-  "${modifier}+Shift+5" = null;
-  "${modifier}+Shift+6" = null;
-  "${modifier}+Shift+7" = null;
-  "${modifier}+Shift+8" = null;
-  "${modifier}+Shift+9" = null;
-  "${modifier}+Shift+0" = null;
-  "${modifier}+Ctrl+1" = null;
-  "${modifier}+Ctrl+2" = null;
-  "${modifier}+Ctrl+3" = null;
-  "${modifier}+Ctrl+4" = null;
-  "${modifier}+Ctrl+5" = null;
-  "${modifier}+Ctrl+6" = null;
-  "${modifier}+Ctrl+7" = null;
-  "${modifier}+Ctrl+8" = null;
-  "${modifier}+Ctrl+9" = null;
-  "${modifier}+Ctrl+0" = null;
+  "${modifier}+Ctrl+1" = "move container to workspace ${ws.WS1};  workspace ${ws.WS1}";
+  "${modifier}+Ctrl+2" = "move container to workspace ${ws.WS2};  workspace ${ws.WS2}";
+  "${modifier}+Ctrl+3" = "move container to workspace ${ws.WS3};  workspace ${ws.WS3}";
+  "${modifier}+Ctrl+4" = "move container to workspace ${ws.WS4};  workspace ${ws.WS4}";
+  "${modifier}+Ctrl+5" = "move container to workspace ${ws.WS5};  workspace ${ws.WS5}";
+  "${modifier}+Ctrl+6" = "move container to workspace ${ws.WS6};  workspace ${ws.WS6}";
+  "${modifier}+Ctrl+7" = "move container to workspace ${ws.WS7};  workspace ${ws.WS7}";
+  "${modifier}+Ctrl+8" = "move container to workspace ${ws.WS8};  workspace ${ws.WS8}";
+  "${modifier}+Ctrl+9" = "move container to workspace ${ws.WS9};  workspace ${ws.WS9}";
+  "${modifier}+Ctrl+0" = "move container to workspace ${ws.WS10}; workspace ${ws.WS10}";
 })

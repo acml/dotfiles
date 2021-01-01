@@ -85,6 +85,12 @@ lib.mkMerge [
           go
           gocode
           gomodifytags
+          delve      # vscode
+          gopkgs     # vscode
+          go-outline # vscode
+          golint     # vscode
+          golangci-lint
+          gopls
           gotests
           gore
           # :lang javascript
