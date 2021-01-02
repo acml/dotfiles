@@ -29,6 +29,7 @@ in
 
       # Programming
       clang
+      exercism
       python3
       gnumake
       powershell
