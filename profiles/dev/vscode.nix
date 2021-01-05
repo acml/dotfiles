@@ -7,35 +7,6 @@ let
       meta = lib.optionalAttrs (ref.license or null != null) { inherit (ref) license; };
     };
 
-  # Replaces VSCodium's open-vsx with Microsoft's extension gallery
-  # This is temporary
-  extensionsGallery = builtins.toJSON {
-    serviceUrl = "https://marketplace.visualstudio.com/_apis/public/gallery";
-    itemUrl = "https://marketplace.visualstudio.com/items";
-  };
-  vscodium = pkgs.vscodium.overrideAttrs(old: {
-    nativeBuildInputs = old.nativeBuildInputs or [ ] ++ [ pkgs.jq ];
-    installPhase = old.installPhase or "" + ''
-      #FILE=$out/lib/vscode/resources/app/product.json
-      FILE=$(find $out -name 'product.json' -print -quit)
-      mv $FILE .
-      echo "Patching product.json"
-      jq <product.json >$FILE '
-        with_entries(
-          if .key == "extensionsGallery"
-          then .value = ${extensionsGallery}
-          else .
-          end
-        )
-      '
-      if [ $? -eq 0 ]; then
-        echo "Patching product.json successfully"
-      else
-        echo "Patching product.json failed"
-      fi
-    '';
-  });
-
   my-vscode-packages = {
     editorconfig = buildVs {
       name = "editorconfig";
@@ -92,11 +63,10 @@ let
 in
 {
   my.home = { config, ... }: {
-    home.packages = [ vscodium ];
 
     programs.vscode = {
       enable = true;
-      package = vscodium;
+      # package = vscodium;
 
       extensions = with pkgs.vscode-extensions; [
         bbenoist.Nix
