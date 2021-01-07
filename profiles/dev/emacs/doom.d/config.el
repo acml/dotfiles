@@ -32,7 +32,7 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-;; (setq doom-theme 'doom-one)
+(setq doom-theme 'modus-operandi)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -42,8 +42,6 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
-;; Set initial position
-(setq frame-resize-pixelwise t)
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -187,19 +185,6 @@
 (use-package! dired-subtree
   :after dired
   :config
-  ;; fixes the case of the first line in dired when the cursor jumps
-  ;; to the header in dired rather then to the first file in buffer
-  (defun dired-subtree-toggle ()
-    "Insert subtree at point or remove it if it was not present."
-    (interactive)
-    (if (dired-subtree--is-expanded-p)
-        (progn
-          (dired-next-line 1)
-          (dired-subtree-remove)
-          (if (bobp)
-              (dired-next-line 1)))
-      (save-excursion (dired-subtree-insert))))
-
   (defadvice dired-subtree-toggle (after dired-icons-refresh ())
     "Insert an empty line when moving up from the top line."
       (revert-buffer))
@@ -207,8 +192,7 @@
 
   (map!
    (:map dired-mode-map
-    :desc "Toggle subtree" :n [tab] #'dired-subtree-toggle))
-  )
+    :desc "Toggle subtree" :n [tab] #'dired-subtree-toggle)))
 
 (after! dired
   ;; Define localleader bindings
@@ -240,11 +224,16 @@
     :init
     (progn
       (add-hook 'prog-mode-hook #'highlight-parentheses-mode)
-      (setq hl-paren-delay 0.2)
-      (setq hl-paren-colors '("Springgreen3"
-                              "IndianRed1"
-                              "IndianRed3"
-                              "IndianRed4")))
+      (setq highlight-parentheses-delay 0.2)
+      (setq highlight-parentheses-colors '(rainbow-delimiters-depth-1-face
+                                           rainbow-delimiters-depth-2-face
+                                           rainbow-delimiters-depth-3-face
+                                           rainbow-delimiters-depth-4-face
+                                           rainbow-delimiters-depth-5-face
+                                           rainbow-delimiters-depth-6-face
+                                           rainbow-delimiters-depth-7-face
+                                           rainbow-delimiters-depth-8-face
+                                           rainbow-delimiters-depth-9-face)))
     :config
     (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold))
 
@@ -315,7 +304,7 @@
         modus-themes-bold-constructs t
         modus-themes-fringes nil ; {nil,'subtle,'intense}
         modus-themes-mode-line '3d ; {nil,'3d,'moody}
-        modus-themes-syntax nil ; Lots of options---continue reading the manual
+        modus-themes-syntax 'faint ; Lots of options---continue reading the manual
         modus-themes-intense-hl-line nil
         modus-themes-paren-match nil ; {nil,'subtle-bold,'intense,'intense-bold}
         modus-themes-links 'neutral-underline ; Lots of options---continue reading the manual
@@ -345,7 +334,7 @@
 
   :config
   ;; Load the theme of your choice
-  (modus-themes-load-operandi)
+  ;; (modus-themes-load-operandi)
   ;; ;; OR
   ;; (load-theme 'modus-operandi t)
   :bind ("<f5>" . modus-themes-toggle))
