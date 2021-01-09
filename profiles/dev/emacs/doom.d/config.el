@@ -37,6 +37,7 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/Documents/org/")
+(setq org-noter-notes-search-path '("~/Documents/org/notes/"))
 
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
@@ -132,9 +133,9 @@
                       t))
 
 (after! ccls
-  (setq ccls-initialization-options
-        (append ccls-initialization-options
-                `(:cache (:directory ,(file-truename "~/.cache/ccls"))))))
+  (setq ccls-initialization-options `(:index (:comments 2)
+                                      :completion (:detailedLabel t)
+                                      :cache (:directory ,(file-truename "~/.cache/ccls")))))
 
 (setq calendar-location-name "Istanbul, Turkey"
       calendar-latitude 41.168602
@@ -328,9 +329,8 @@
         modus-themes-scale-4 1.27
         modus-themes-scale-5 1.33)
 
-  ;; Enable the theme files
-  (use-package modus-operandi-theme)
-  (use-package modus-vivendi-theme)
+  ;; Load the theme files before enabling a theme
+  (modus-themes-load-themes)
 
   :config
   ;; Load the theme of your choice
