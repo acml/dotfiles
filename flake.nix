@@ -4,7 +4,7 @@
 
   inputs = {
     # This input I update less frequently
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable-small";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
     # home-manager.url= "github:berbiche/home-manager/waybar-module-css-ids-fix";
