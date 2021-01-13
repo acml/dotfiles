@@ -126,7 +126,10 @@ in
         ssh = "TERM=xterm-256color ssh";
         sw = "ssh sw";
         wipe = "${pkgs.srm}/bin/srm -vfr";
-        upgrade = "sudo nixos-rebuild switch --upgrade";
+        update = "pushd /Users/ahmet/Projects/dotfiles >/dev/null 2>&1 &&
+                  nix flake update --recreate-lock-file;
+                  popd >/dev/null 2>&1";
+        # upgrade = "sudo nixos-rebuild switch --upgrade";
         rebuild = lib.mkMerge [
           (lib.mkIf isDarwin "pushd /Users/ahmet/Projects/dotfiles >/dev/null 2>&1 &&
                               darwin-rebuild switch --flake '/Users/ahmet/Projects/dotfiles#Ahmets-MacBook-Pro' -v;
