@@ -51,6 +51,7 @@ in
       yabai -m rule --add app='^System Preferences$' manage=off
       yabai -m rule --add app="^Digital Colou?r Meter$" sticky=on
       yabai -m rule --add label="Finder" app="^Finder$" title="(Co(py|nnect)|Move|Info|Pref)" manage=off
+      yabai -m rule --add app='^Stats$' manage=off
       yabai -m rule --add app="emacs" manage="on"
 
       echo "Yabai configuration loaded"
