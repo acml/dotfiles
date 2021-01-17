@@ -26,6 +26,8 @@ lib.mkMerge [
       e   = "emacsclient -nw";
     };
 
+    nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];
+
     my.home = lib.mkMerge [
       { imports = [ inputs.doom-emacs.hmModule ]; }
       {
@@ -35,7 +37,7 @@ lib.mkMerge [
           # emacsPackage = pkgs.emacsGccPgtk;
           emacsPackage = lib.mkMerge [
             (lib.mkIf isLinux pkgs.emacsPgtk)
-            (lib.mkIf isDarwin pkgs.emacs)
+            (lib.mkIf isDarwin pkgs.emacsPgtk)
           ];
           emacsPackagesOverlay = overrides;
           extraConfig = ''
