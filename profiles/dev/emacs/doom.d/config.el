@@ -223,22 +223,11 @@
   (edit-server-start))
 
 (use-package! highlight-parentheses
-    :defer t
-    :init
-    (progn
-      (add-hook 'prog-mode-hook #'highlight-parentheses-mode)
-      (setq highlight-parentheses-delay 0.2)
-      (setq highlight-parentheses-colors '(rainbow-delimiters-depth-1-face
-                                           rainbow-delimiters-depth-2-face
-                                           rainbow-delimiters-depth-3-face
-                                           rainbow-delimiters-depth-4-face
-                                           rainbow-delimiters-depth-5-face
-                                           rainbow-delimiters-depth-6-face
-                                           rainbow-delimiters-depth-7-face
-                                           rainbow-delimiters-depth-8-face
-                                           rainbow-delimiters-depth-9-face)))
-    :config
-    (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold))
+  :init
+  (add-hook 'prog-mode-hook #'highlight-parentheses-mode)
+  (setq highlight-parentheses-delay 0.2)
+  :config
+  (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold))
 
 (use-package! journalctl-mode)
 
@@ -306,25 +295,52 @@
   (setq modus-themes-slanted-constructs t
         modus-themes-bold-constructs t
         modus-themes-fringes nil ; {nil,'subtle,'intense}
-        modus-themes-mode-line '3d ; {nil,'3d,'moody}
-        modus-themes-syntax 'faint ; Lots of options---continue reading the manual
+
+        ;; Options for `modus-themes-lang-checkers': nil,
+        ;; 'straight-underline, 'subtle-foreground,
+        ;; 'subtle-foreground-straight-underline, 'intense-foreground,
+        ;; 'intense-foreground-straight-underline, 'colored-background
+        modus-themes-lang-checkers 'straight-underline
+
+        ;; Options for `modus-themes-mode-line': nil, '3d, 'moody,
+        ;; 'borderless, 'borderless-3d, 'borderless-moody
+        modus-themes-mode-line 'borderless-3d
+
+        ;; Options for `modus-themes-syntax': nil, 'faint,
+        ;; 'yellow-comments, 'green-strings,
+        ;; 'yellow-comments-green-strings, 'alt-syntax,
+        ;; 'alt-syntax-yellow-comments
+        modus-themes-syntax 'faint
+
         modus-themes-intense-hl-line nil
-        modus-themes-paren-match nil ; {nil,'subtle-bold,'intense,'intense-bold}
-        modus-themes-links 'neutral-underline ; Lots of options---continue reading the manual
+        modus-themes-paren-match 'subtle-bold ; {nil,'subtle-bold,'intense,'intense-bold}
+
+        ;; Options for `modus-themes-links': nil, 'faint,
+        ;; 'neutral-underline, 'faint-neutral-underline, 'no-underline,
+        ;; 'underline-only
+        modus-themes-links 'no-underline
+
         modus-themes-no-mixed-fonts nil
-        modus-themes-prompts 'subtle ; {nil,'subtle,'intense}
+
+        ;; Options for `modus-themes-prompts': nil, 'subtle-accented,
+        ;; 'intense-accented, 'subtle-gray, 'intense-gray
+        modus-themes-prompts 'subtle-accented
+
         modus-themes-completions 'opinionated ; {nil,'moderate,'opinionated}
         modus-themes-region 'bg-only-no-extend ; {nil,'no-extend,'bg-only,'bg-only-no-extend}
         modus-themes-diffs 'desaturated ; {nil,'desaturated,'fg-only,'bg-only}
         modus-themes-org-blocks nil ; {nil,'grayscale,'rainbow}
-        modus-themes-org-habit 'traffic-light ; {nil,'simplified,'traffic-light}
+        modus-themes-org-habit nil ; {nil,'simplified,'traffic-light}
+
         modus-themes-headings ; Lots of options---continue reading the manual
         '((1 . section)
           (2 . section-no-bold)
           (3 . rainbow-line)
           (t . rainbow-line-no-bold))
-        modus-themes-variable-pitch-headings nil
-        modus-themes-scale-headings nil
+
+        modus-themes-variable-pitch-ui t
+        modus-themes-variable-pitch-headings t
+        modus-themes-scale-headings t
         modus-themes-scale-1 1.1
         modus-themes-scale-2 1.15
         modus-themes-scale-3 1.21
@@ -332,7 +348,7 @@
         modus-themes-scale-5 1.33)
 
   ;; Load the theme files before enabling a theme
-  (modus-themes-load-themes)
+  ;; (modus-themes-load-themes)
 
   :config
   ;; Load the theme of your choice
