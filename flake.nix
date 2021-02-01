@@ -13,7 +13,8 @@
 
     doom-emacs.url = "github:vlaci/nix-doom-emacs";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
-    emacs-overlay.url = "github:nix-community/emacs-overlay/e3da699893c4be3b946d3586143b03450f9680ee";
+    # emacs-overlay.url = "github:nix-community/emacs-overlay/e3da699893c4be3b946d3586143b03450f9680ee";
+    emacs-overlay.url = "github:nix-community/emacs-overlay";
 
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
