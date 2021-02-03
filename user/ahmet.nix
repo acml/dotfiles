@@ -58,7 +58,6 @@ lib.mkMerge [
       # Passwords and stuff
       # services.gnome-keyring.enable = true;
 
-      services.lorri.enable = true;
       #services.blueman-applet.enable = true;
       #services.kdeconnect.enable = true;
       #services.kdeconnect.indicator = true;
@@ -69,6 +68,8 @@ lib.mkMerge [
   # </isLinux>
 
   {
+    services.lorri.enable = true;
+
     my.home = { ... }: {
       my.identity = {
         name = "Ahmet Cemal Özgezer";
