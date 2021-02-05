@@ -14,29 +14,11 @@ let
       version = "0.15.1";
       sha256 = "TaovxmPt+PLsdkWDpUgLx+vRE+QRwcCtoAFZFWxLIaM=";
     };
-    erlang = buildVs {
-      name = "erlang";
-      publisher = "pgourlain";
-      version = "0.6.5";
-      sha256 = "B5xLx6pI2jL7zMmeP+NqmXZ0HNkTLSxHlf9YcOD0RvM=";
-    };
     firefox-dev-tools = buildVs {
       name = "vscode-firefox-debug";
       publisher = "firefox-devtools";
       version = "2.9.1";
       sha256 = "ryAAgXeqwHVYpUVlBTJDxyIXwdakA0ZnVYyKNk36Ifc=";
-    };
-    java = buildVs {
-      name = "java";
-      publisher = "redhat";
-      version = "0.70.0";
-      sha256 = "U1314bagDJO2houMyffq76qvaOdriEbR3npjugnzILg=";
-    };
-    java-debugger = buildVs {
-      name = "vscode-java-debug";
-      publisher = "vscjava";
-      version = "0.29.0";
-      sha256 = "xOPbJyXAqoEsKIBjkCqhguufbh+wZRgOM1MJ6t0p/4Q=";
     };
     nix-env-selector = buildVs {
       name = "nix-env-selector";
@@ -64,23 +46,37 @@ in
 {
   my.home = { config, ... }: {
 
+    home.packages = with pkgs; [
+      rnix-lsp
+    ];
+
     programs.vscode = {
       enable = true;
       # package = vscodium;
 
       extensions = with pkgs.vscode-extensions; [
-        bbenoist.Nix
+        # bbenoist.Nix
+        # ms-kubernetes-tools.vscode-kubernetes-tools
+        coenraads.bracket-pair-colorizer-2
+        donjayamanne.githistory
+        eamodio.gitlens
+        esbenp.prettier-vscode
+        file-icons.file-icons
+        golang.Go
+        ibm.output-colorizer
+        jnoortheen.nix-ide
+        mechatroner.rainbow-csv
+        ms-vscode-remote.remote-ssh
         redhat.vscode-yaml
-        ms-vscode-remote.remote-ssh
-        ms-kubernetes-tools.vscode-kubernetes-tools
-        ms-vscode-remote.remote-ssh
         vscodevim.vim
         xaver.clang-format
       ]
       ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [
         # ms-vsliveshare.vsliveshare
-        ms-python.python
+        # vadimcn.vscode-lldb
         llvm-org.lldb-vscode
+        ms-python.python
+        ms-vscode.cpptools
       ]
       ++ lib.attrValues my-vscode-packages;
 
@@ -95,25 +91,27 @@ in
         "extensions.autoCheckUpdates" = false;
         "git.suggestSmartCommit" = false;
         "search.collapseResults" = "alwaysCollapse";
-        "update.mode" = "none";
         "update.channel" = "none";
+        "update.mode" = "none";
         "window.menuBarVisibility" = "toggle";
         "window.restoreWindows" = "none";
         "window.title" = "\${activeEditorShort}\${separator}\${rootName}\${separator}\${appName}";
-        "workbench.activityBar.visible" = false;
+        "workbench.activityBar.visible" = true;
         "workbench.colorTheme" = "Monokai Dimmed";
         "workbench.editor.highlightModifiedTabs" = true;
         "workbench.editor.showTabs" = true;
         "workbench.editor.tabCloseButton" = "off";
         "workbench.editor.untitled.labelFormat" = "name";
+        "workbench.iconTheme" = "file-icons";
         "workbench.list.smoothScrolling" = true;
 
         # Extension settings
-        "java.semanticHighlighting.enabled" = true;
         "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}";
 
         # Language settings
         "[nix]"."editor.tabSize" = 2;
+        "go.useLanguageServer" = true;
+        "gopls"."experimentalWorkspaceModule" = true;
       };
 
       keybindings = [

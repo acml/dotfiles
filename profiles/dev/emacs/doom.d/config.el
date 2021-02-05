@@ -231,6 +231,10 @@
 
 (use-package! journalctl-mode)
 
+(after! lsp-go
+  (lsp-register-custom-settings
+   '(("gopls.experimentalWorkspaceModule" t t))))
+
 (use-package! lsp-mode
   :config
   (setq lsp-headerline-breadcrumb-enable t
