@@ -1,7 +1,11 @@
 { config, inputs, lib, pkgs, ... }:
 
 let
-  toPlugin = n: v: pkgs.vimUtils.buildVimPluginFrom2Nix { name = n; src = v; };
+  toPlugin = n: v:
+    pkgs.vimUtils.buildVimPluginFrom2Nix {
+      name = n;
+      src = v;
+    };
 
   myPlugins = lib.mapAttrsToList toPlugin {
     anderson = inputs.vim-theme-anderson;
@@ -16,8 +20,8 @@ let
       hash = "sha256-Kqk3ZdWXCR7uqE9GJ+zaDMs0SeP/0/8bTxdoDiRnRTo=";
     };
   };
-in
-{
+in {
+  nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
   my.home = {
     home.packages = [ pkgs.fzf ];
 
@@ -27,51 +31,52 @@ in
       vimAlias = true;
       vimdiffAlias = true;
       withNodeJs = true;
+      package = pkgs.neovim-nightly;
 
-      plugins = myPlugins ++ (with pkgs.vimPlugins; [
-        sensible
-        commentary
-        vim-indent-guides
-        # Language
-        vim-nix
-        #vim-addon-nix
-        polyglot
-        ale
-        # LSP
-        coc-explorer
-        coc-go
-        coc-html
-        coc-json
-        coc-markdownlint
-        coc-nvim
-        coc-python
-        coc-rust-analyzer
-        # coc-sh
-        coc-vimlsp
-        # Git
-        fugitive
-        # Shows symbol with LSP
-        vista-vim
-        # Rainbow paranthesis, brackets
-        rainbow
-        # Statusbar
-        vim-airline
-        vim-airline-themes
-        # File lookup
-        fzf-vim
-        # File tree
-        defx-nvim
-        # Show key completion
-        vim-which-key
-        # Buffer
-        vim-buffergator
-        #
-        # vim-indent-object
-        #
-        # Gutter with  mode
-        vim-signify
-      ]
-      ++ lib.optional config.profiles.dev.wakatime.enable vim-wakatime);
+      plugins = myPlugins ++ (with pkgs.vimPlugins;
+        [
+          sensible
+          commentary
+          vim-indent-guides
+          # Language
+          vim-nix
+          #vim-addon-nix
+          polyglot
+          ale
+          # LSP
+          coc-explorer
+          coc-go
+          coc-html
+          coc-json
+          coc-markdownlint
+          coc-nvim
+          coc-python
+          coc-rust-analyzer
+          # coc-sh
+          coc-vimlsp
+          # Git
+          fugitive
+          # Shows symbol with LSP
+          vista-vim
+          # Rainbow paranthesis, brackets
+          rainbow
+          # Statusbar
+          vim-airline
+          vim-airline-themes
+          # File lookup
+          fzf-vim
+          # File tree
+          defx-nvim
+          # Show key completion
+          vim-which-key
+          # Buffer
+          vim-buffergator
+          #
+          # vim-indent-object
+          #
+          # Gutter with  mode
+          vim-signify
+        ] ++ lib.optional config.profiles.dev.wakatime.enable vim-wakatime);
 
       extraConfig = ''
         " Default settings
@@ -111,7 +116,7 @@ in
         set splitbelow splitright
         set mouse=nv                " Enable mouse usage except in insert mode
 
-        set formatoptions+=j   " remove a comment leader when joining lines. 
+        set formatoptions+=j   " remove a comment leader when joining lines.
         set formatoptions+=o   " insert the comment leader after hitting 'o'
 
         " Enable autocompletion

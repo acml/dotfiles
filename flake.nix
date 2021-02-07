@@ -21,6 +21,7 @@
       url = "github:colemickens/nixpkgs-wayland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     vim-theme-monokai = { url = "github:sickill/vim-monokai"; flake = false; };
     vim-theme-anderson = { url = "github:tlhr/anderson.vim"; flake = false; };
     vim-theme-synthwave84 = { url = "github:artanikin/vim-synthwave84"; flake = false; };
@@ -31,7 +32,9 @@
     inherit (nixpkgs) lib;
 
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-
+      # overlays = [
+      #     inputs.neovim-nightly-overlay.overlay
+      #   ];
     forAllPlatforms = f: lib.genAttrs platforms (platform: f platform);
 
     nixpkgsFor = forAllPlatforms (platform: import nixpkgs {
@@ -140,6 +143,7 @@
 
         darwinDefaults = { config, pkgs, lib, ... }: {
           imports = [ inputs.home-manager.darwinModules.home-manager ];
+          # nixpkgs.overlays = overlays;
           nix.gc.user = args.username;
           nix.nixPath = [
             "nixpkgs=${pkgs.path}"
