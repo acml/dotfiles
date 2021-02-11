@@ -372,6 +372,40 @@
   :config
   (add-to-list 'evil-emacs-state-modes 'trashed-mode))
 
+(use-package! treemacs
+  :config
+  (setq treemacs-collapse-dirs (if (executable-find "python") 3 0)
+        treemacs-eldoc-display t
+        treemacs-is-never-other-window t
+        treemacs-recenter-after-file-follow t
+        treemacs-recenter-after-project-expand 'on-distance
+        treemacs-show-hidden-files t
+        treemacs-silent-filewatch t
+        treemacs-silent-refresh t
+        treemacs-sorting 'alphabetic-asc
+        treemacs-user-mode-line-format 'none
+        treemacs-width 40
+        treemacs-follow-after-init t)
+
+  ;; set the correct python3 executable path. This is needed for
+  ;; treemacs-git-mode extended
+  (setq treemacs-python-executable (executable-find "python"))
+
+  ;; highlight current line in fringe for treemacs window
+  (treemacs-fringe-indicator-mode)
+
+  (treemacs-follow-mode t)
+  (treemacs-filewatch-mode t)
+
+  (pcase (cons (not (null (executable-find "git")))
+               (not (null treemacs-python-executable)))
+    (`(t . t)
+     (progn
+       (setq +treemacs-git-mode 'deferred)
+       (treemacs-git-mode 'deferred)))
+    (`(t . _)
+     (treemacs-git-mode 'simple))))
+
 (use-package! vterm
   :config
   (setq vterm-max-scrollback 100000))
