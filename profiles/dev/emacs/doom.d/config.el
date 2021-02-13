@@ -317,6 +317,7 @@
         modus-themes-syntax 'faint
 
         modus-themes-intense-hl-line nil
+        modus-themes-subtle-line-numbers nil
         modus-themes-paren-match 'subtle-bold ; {nil,'subtle-bold,'intense,'intense-bold}
 
         ;; Options for `modus-themes-links': nil, 'faint,
