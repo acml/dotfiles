@@ -45,6 +45,18 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
+(setq frame-title-format
+      '(""
+        (:eval
+         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
+             (replace-regexp-in-string
+              ".*/[0-9]*-?" "☰ "
+              (subst-char-in-string ?_ ?  buffer-file-name))
+           "%b"))
+        (:eval
+         (let ((project-name (projectile-project-name)))
+           (unless (string= "-" project-name)
+             (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
 
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
@@ -99,8 +111,15 @@
 (setq-default
  delete-by-moving-to-trash t)
 
-(windmove-default-keybindings 'control)
-(windswap-default-keybindings 'control 'shift)
+;; (windmove-default-keybindings 'control)
+;; (windswap-default-keybindings 'control 'shift)
+;; (add-hook 'org-shiftup-final-hook 'windmove-up)
+;; (add-hook 'org-shiftleft-final-hook 'windmove-left)
+;; (add-hook 'org-shiftdown-final-hook 'windmove-down)
+;; (add-hook 'org-shiftright-final-hook 'windmove-right)
+
+(add-to-list 'term-file-aliases
+             '("alacritty" . "xterm-256color"))
 
 ; Each path is relative to `+mu4e-mu4e-mail-path', which is ~/.mail by default
 (after! mu4e
@@ -175,6 +194,7 @@
 ;;
 ;; Dired
 ;;
+
 ;; Hook up dired-x global bindings without loading it up-front
 (define-key ctl-x-map "\C-j" 'dired-jump)
 (define-key ctl-x-4-map "\C-j" 'dired-jump-other-window)
@@ -183,6 +203,7 @@
 (add-hook! dired-mode
   (dired-hide-details-mode 1)
   ;; (dired-show-readme-mode 1)
+  ;; (dired-auto-readme-mode 1)
   )
 
 (use-package! dired-subtree
@@ -198,6 +219,7 @@
     :desc "Toggle subtree" :n [tab] #'dired-subtree-toggle)))
 
 (after! dired
+  (dired-async-mode 1)
   ;; Define localleader bindings
   (map!
    ;; Define or redefine dired bindings
@@ -208,19 +230,12 @@
 (use-package! docker-tramp)
 (use-package! docker)
 
-(use-package! edit-server
-  :if (daemonp)
-  :defer 10
+(use-package! atomic-chrome
+  :after-call focus-out-hook
   :config
-  (setq edit-server-new-frame nil)
-  (setq edit-server-url-major-mode-alist
-        '(("reddit\\.com" . markdown-mode)
-          ("github\\.com" . gfm-mode)
-          ("gitlab\\.com" . gfm-mode)
-          ("gitlab\\.paesslergmbh\\.de" . gfm-mode)
-          ("lab\\.ebenefuenf\\.com" . gfm-mode)
-          ("jira.paesslergmbh.de" . jira-markup-mode)))
-  (edit-server-start))
+  (setq atomic-chrome-default-major-mode 'markdown-mode
+        atomic-chrome-buffer-open-style 'frame)
+  (atomic-chrome-start-server))
 
 (use-package! highlight-parentheses
   :init
@@ -250,6 +265,12 @@
                          right-fringe-width 8)))
 
 ;;; :tools magit
+(after! magit
+  (magit-add-section-hook 'magit-status-sections-hook
+                          'magit-insert-ignored-files
+                          'magit-insert-untracked-files
+                          nil))
+
 (setq magit-repository-directories '(("~/Projects" . 2))
       magit-save-repository-buffers nil
       ;; Don't restore the wconf after quitting magit, it's jarring

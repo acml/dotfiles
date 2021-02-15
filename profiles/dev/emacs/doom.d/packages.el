@@ -60,16 +60,16 @@
 ;; (package! move-text) ;; for spacemacs-editing
 ;; (package! string-inflection) ;; for spacemacs-editing
 
+(package! atomic-chrome)
 (package! beginend)
 (package! daemons)
 
 ;; (package! dired-show-readme :recipe (:host gitlab :repo "kisaragi-hiu/dired-show-readme"))
+;; (package! dired-auto-readme :recipe (:host github :repo "amno1/dired-auto-readme"))
 (package! dired-subtree)
 
 (package! docker)
 (package! docker-tramp)
-(package! edit-server)
-
 (package! highlight-parentheses)
 (package! journalctl-mode)
 
