@@ -3,6 +3,7 @@
 {
   my.home = { ... }: {
     home.packages = with pkgs; [
+      delve
       errcheck
       go
       go2nix
