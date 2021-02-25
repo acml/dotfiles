@@ -44,6 +44,7 @@ in
       oh-my-zsh = {
         enable = true;
         plugins = [
+          "colored-man-pages"
           # "common-aliases"
           "dirhistory"
           "extract"
@@ -86,15 +87,6 @@ in
             repo = "zsh-you-should-use";
             rev = "b4aec740f23d195116d1fddec91d67b5e9c2c5c7";
             sha256 = "0bq15d6jk750cdbbjfdmdijp644d1pn2z80pk1r1cld6qqjnsaaq";
-          };
-        }
-        {
-          name = "solarized-man";
-          src = pkgs.fetchFromGitHub {
-            owner = "zlsun";
-            repo = "solarized-man";
-            rev = "e69d2cedc3a51031e660f2c3459b08ab62ef9afa";
-            sha256 = "1ljnqxfzhi26jfzm0nm2s9w43y545sj1gmlk6pyd9a8zc0hafdx8";
           };
         }
       ];
