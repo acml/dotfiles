@@ -56,18 +56,17 @@ in
 
       extensions = with pkgs.vscode-extensions; [
         # bbenoist.Nix
-        # ms-kubernetes-tools.vscode-kubernetes-tools
-        coenraads.bracket-pair-colorizer-2
-        donjayamanne.githistory
+        # coenraads.bracket-pair-colorizer-2
+        # donjayamanne.githistory
         eamodio.gitlens
-        esbenp.prettier-vscode
-        file-icons.file-icons
+        # esbenp.prettier-vscode
+        # file-icons.file-icons
         golang.Go
-        ibm.output-colorizer
+        # ibm.output-colorizer
         jnoortheen.nix-ide
-        mechatroner.rainbow-csv
+        # mechatroner.rainbow-csv
         ms-vscode-remote.remote-ssh
-        redhat.vscode-yaml
+        # redhat.vscode-yaml
         vscodevim.vim
         xaver.clang-format
       ]
