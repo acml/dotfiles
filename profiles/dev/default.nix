@@ -35,7 +35,9 @@ in
       powershell
       tig
 
-      wget curl aria
+      # wget
+      curl
+      # aria
       lsof
       gitFull rsync
       nmap telnet tcpdump dnsutils mtr

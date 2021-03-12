@@ -119,7 +119,7 @@ in
         sw = "ssh sw";
         wipe = "${pkgs.srm}/bin/srm -vfr";
         update = "pushd /Users/ahmet/Projects/dotfiles >/dev/null 2>&1 &&
-                  nix flake update --recreate-lock-file;
+                  nix flake update;
                   popd >/dev/null 2>&1";
         # upgrade = "sudo nixos-rebuild switch --upgrade";
         rebuild = lib.mkMerge [
