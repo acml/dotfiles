@@ -32,7 +32,7 @@ in
       exercism
       python3
       gnumake
-      powershell
+      # powershell
       tig
 
       # wget
@@ -42,7 +42,8 @@ in
       gitFull rsync
       nmap telnet tcpdump dnsutils mtr
       exa fd fzf ripgrep hexyl tree bc bat
-      procs sd dust tokei # bandwhich
+      # procs
+      sd dust tokei # bandwhich
       bottom # hyperfine
       htop ctop
       # docker-compose
