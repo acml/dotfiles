@@ -98,6 +98,8 @@ lib.mkMerge [
           gore
           # :lang javascript
           nodePackages.javascript-typescript-langserver
+          # :lang lua
+          (lib.mkIf isLinux sumneko-lua-language-server)
           # :lang sh
           nodePackages.bash-language-server
           # :lang latex & :lang org (latex previews)
