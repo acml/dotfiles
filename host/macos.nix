@@ -30,7 +30,22 @@ in
     enableFontDir = true;
     fonts = with pkgs; [
       emacs-all-the-icons-fonts
-      (nerdfonts.override { fonts = [ "Iosevka" ]; } )
+      (nerdfonts.override {
+        fonts = [
+          # "DejaVuSansMono"
+          # "DroidSansMono"
+          # "FiraCode"
+          # "FiraMono"
+          # "Hermit"
+          "IBMPlexMono"
+          # "Inconsolata"
+          "Iosevka"
+          # "Noto"
+          "Overpass"
+          # "RobotoMono"
+          # "Ubuntu"
+        ];
+      })
     ];
   };
 
