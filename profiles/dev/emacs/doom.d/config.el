@@ -63,18 +63,18 @@
 
       +ivy-buffer-preview t
 
-      frame-title-format
-      '(""
-        (:eval
-         (if (s-contains-p org-roam-directory (or buffer-file-name ""))
-             (replace-regexp-in-string
-              ".*/[0-9]*-?" "☰ "
-              (subst-char-in-string ?_ ?  buffer-file-name))
-           "%b"))
-        (:eval
-         (let ((project-name (projectile-project-name)))
-           (unless (string= "-" project-name)
-             (format (if (buffer-modified-p)  " ◉ %s" "  ●  %s") project-name))))))
+      ;; If you use `org' and don't want your org files in the default location below,
+      ;; change `org-directory'. It must be set before org loads!
+      org-directory "~/Documents/org/"
+      ;; ;; ;; org-noter-notes-search-path '("~/Documents/org/notes/")
+      ;; org-archive-location (concat org-directory ".archive/%s::")
+      ;; org-roam-directory (concat org-directory "notes/")
+      ;; org-roam-db-location (concat org-roam-directory ".org-roam.db")
+      ;; org-journal-encrypt-journal t
+      ;; org-journal-file-format "%Y%m%d.org"
+      ;; org-startup-folded 'overview
+      ;; org-ellipsis " [...] "
+      )
 
 ;; (if (equal "Battery status not available"
 ;;            (battery))
@@ -364,6 +364,7 @@
   (lsp-register-custom-settings
    '(("gopls.experimentalWorkspaceModule" t t))))
 
+(when nil
 (use-package! lsp-mode
   :config
   (setq lsp-headerline-breadcrumb-enable t
@@ -372,6 +373,7 @@
         ;; lsp-signature-auto-activate nil
         ;; lsp-completion-use-last-result nil
         ))
+) ; when nil
 
 (add-hook! ('magit-mode-hook 'text-mode-hook 'prog-mode-hook)
            (defun acml/set-fringe-widths ()
@@ -474,21 +476,6 @@
   :bind ("<f5>" . modus-themes-toggle)
   )
 
-(use-package! org
-  :init
-  (setq
-      ;; If you use `org' and don't want your org files in the default location below,
-      ;; change `org-directory'. It must be set before org loads!
-      org-directory "~/Documents/org/"
-      ;; ;; org-noter-notes-search-path '("~/Documents/org/notes/")
-      org-archive-location (concat org-directory ".archive/%s::")
-      org-roam-directory (concat org-directory "notes/")
-      org-roam-db-location (concat org-roam-directory ".org-roam.db")
-      org-journal-encrypt-journal t
-      org-journal-file-format "%Y%m%d.org"
-      org-startup-folded 'overview
-      org-ellipsis " [...] "))
-
 (use-package! rainbow-mode
   :hook
   ((prog-mode . rainbow-mode)
@@ -498,6 +485,7 @@
   :config
   (add-to-list 'evil-emacs-state-modes 'trashed-mode))
 
+(when nil
 (use-package! treemacs
   :init
   (defvar treemacs-no-load-time-warnings t)
@@ -533,6 +521,7 @@
        (treemacs-git-mode 'deferred)))
     (`(t . _)
      (treemacs-git-mode 'simple))))
+) ; when nil
 
 (use-package! vterm
   :config
