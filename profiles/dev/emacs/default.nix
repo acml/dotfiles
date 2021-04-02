@@ -53,7 +53,18 @@ lib.mkMerge [
           '';
         };
 
-        programs.zsh.initExtra = builtins.readFile ./emacs-vterm-zsh.sh;
+        programs.zsh.initExtra = ''
+          ${builtins.readFile ./emacs-vterm-zsh.sh}
+          ${builtins.readFile ./run-emacs-zsh.sh}
+          '';
+        programs.zsh.shellAliases = {
+          # Create a new frame in the default daemon
+          e = "run_emacs default -n -c";
+          # Create a new terminal (TTY) frame in the default daemon
+          en = "run_emacs default -t";
+          # Open a new frame in the `mail` daemon, and start notmuch in the frame
+          em = "run_emacs mail -n -c -e '(notmuch-hello)'";
+        };
 
         home.packages = with pkgs; [
           (lib.mkIf isDarwin coreutils-prefixed)

@@ -95,7 +95,6 @@ in
         cp="cp -i";
         mv="mv -i";
 
-        calc = "emacs -nw -Q -f full-calc";
         cat = "${pkgs.bat}/bin/bat";
         df = "df -h";
         # du = "${pkgs.du-dust}/bin/dust";
