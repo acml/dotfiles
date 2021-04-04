@@ -58,6 +58,7 @@ lib.mkMerge [
           ${builtins.readFile ./run-emacs-zsh.sh}
           '';
         programs.zsh.shellAliases = {
+          calc = "emacs -nw -Q -f full-calc";
           # Create a new frame in the default daemon
           e = "run_emacs default -n -c";
           # Create a new terminal (TTY) frame in the default daemon
