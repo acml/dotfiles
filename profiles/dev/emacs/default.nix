@@ -28,30 +28,90 @@ lib.mkMerge [
 
     nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];
 
-    my.home = lib.mkMerge [
-      { imports = [ inputs.doom-emacs.hmModule ]; }
+    my.home = { config, lib, ... }:
+      lib.mkMerge [
+      # { imports = [ inputs.doom-emacs.hmModule ]; }
       {
-        programs.doom-emacs = {
+        home.sessionPath = [ "\${HOME}/.emacs.d/bin" ];
+        home.sessionVariables = {
+          # DOOMDIR = "${config.xdg.configHome}/emacs.d";
+          DOOMDIR = "\${HOME}/.doom";
+
+          DOOMLOCALDIR = "${config.xdg.configHome}/doom-local";
+          # DOOMLOCALDIR = "\${HOME}/.emacs.d";
+          # DOOMLOCALDIR = "\${HOME}/.emacs.d";
+        };
+
+        home.file = {
+            ".emacs.d" = {
+              source = builtins.fetchGit {
+               url = "https://github.com/hlissner/doom-emacs";
+               ref = "develop";
+               rev = "ce65645fb87ed1b24fb1a46a33f77cf1dcc1c0d5";
+              };
+              onChange = "${pkgs.writeShellScript "doom-change" ''
+          export DOOMDIR="${config.home.sessionVariables.DOOMDIR}"
+          export DOOMLOCALDIR="${config.home.sessionVariables.DOOMLOCALDIR}"
+          if [ ! -d "$DOOMLOCALDIR" ]; then
+            ''${HOME}/.emacs.d/bin/doom -y install
+          else
+            ''${HOME}/.emacs.d/bin/doom -y sync -u
+          fi
+        ''}";
+            };
+            ".doom/config.el".source = ./doom.d/config.el;
+            ".doom/init.el".source = ./doom.d/init.el;
+            ".doom/packages.el".source = ./doom.d/packages.el;
+            ".doom/splash.png".source = ./doom.d/splash.png;
+        };
+        xdg = {
           enable = true;
-          doomPrivateDir = ./doom.d;
-          # emacsPackage = pkgs.emacsPgtkGcc;
-          emacsPackage = lib.mkMerge [
+          configFile = {
+          };
+        };
+
+        programs.emacs = {
+          enable = true;
+          # package = pkgs.emacsPgtkGcc;
+          package= lib.mkMerge [
             (lib.mkIf isLinux pkgs.emacsPgtk)
             (lib.mkIf isDarwin pkgs.emacsPgtk)
           ];
-          emacsPackagesOverlay = overrides;
-          extraConfig = ''
-            (setq ispell-program-name "aspell")
-            (setq ispell-dictionary "english")
-            ${lib.optionalString isDarwin ''
-              (setq insert-directory-program "gls")
-            ''}
-            ${lib.optionalString enableWakaTime ''
-              (global-wakatime-mode t)
-              (setq wakatime-cli-path "${pkgs.wakatime}/bin/wakatime")
-            ''}
-          '';
+          # package = pkgs.emacsGcc;
+          # package = pkgs.emacsGit;
+          # package = pkgs.emacs;
+          extraPackages = (epkgs:
+            (with epkgs; [
+              # exwm
+              vterm
+              pdf-tools
+            ]) ++
+
+            # MELPA packages:
+            (with epkgs.melpaPackages; [ ]));
         };
+
+        # programs.doom-emacs = {
+        #   enable = true;
+        #   doomPrivateDir = ./doom.d;
+        #   # emacsPackage = pkgs.emacsPgtkGcc;
+        #   emacsPackage = lib.mkMerge [
+        #     (lib.mkIf isLinux pkgs.emacsPgtk)
+        #     (lib.mkIf isDarwin pkgs.emacsPgtk)
+        #   ];
+        #   emacsPackagesOverlay = overrides;
+        #   extraConfig = ''
+        #     (setq ispell-program-name "aspell")
+        #     (setq ispell-dictionary "english")
+        #     ${lib.optionalString isDarwin ''
+        #       (setq insert-directory-program "gls")
+        #     ''}
+        #     ${lib.optionalString enableWakaTime ''
+        #       (global-wakatime-mode t)
+        #       (setq wakatime-cli-path "${pkgs.wakatime}/bin/wakatime")
+        #     ''}
+        #   '';
+        # };
 
         programs.zsh.initExtra = ''
           ${builtins.readFile ./emacs-vterm-zsh.sh}
@@ -78,8 +138,8 @@ lib.mkMerge [
           fd # faster projectile indexing
           imagemagick # for image-dired
           nixfmt
-          (lib.mkIf (config.programs.gnupg.agent.enable)
-            pinentry_emacs) # in-emacs gnupg prompts
+          # (lib.mkIf (config.programs.gnupg.agent.enable)
+          #   pinentry_emacs) # in-emacs gnupg prompts
           unzip
           zstd # for undo-fu-session/undo-tree compression
 

@@ -64,7 +64,7 @@
 (package! daemons)
 
 ;; (package! dired-show-readme :recipe (:host gitlab :repo "kisaragi-hiu/dired-show-readme"))
-;; (package! dired-auto-readme :recipe (:host github :repo "amno1/dired-auto-readme"))
+(package! dired-auto-readme :recipe (:host github :repo "amno1/dired-auto-readme"))
 (package! dired-subtree)
 
 (package! docker)

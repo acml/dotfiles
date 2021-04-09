@@ -29,7 +29,8 @@ let
     terminal = "${alacritty} --working-directory $HOME";
 
     alacritty = "${pkgs.alacritty}/bin/alacritty";
-    emacs = "emacsclient -a '' -nc";
+    # emacs = "emacsclient -a '' -nc";
+    emacs = "env DOOMDIR=\${HOME}/.doom DOOMLOCALDIR=\${HOME}/.config/doom-local emacsclient -a '' -nc";
   };
 
   # Helpers
