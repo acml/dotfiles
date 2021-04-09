@@ -5,16 +5,6 @@ let
 
   enableWakaTime = config.profiles.dev.wakatime.enable;
 
-  # overrides = eself: esuper: rec {
-  #   auctex = esuper.auctex.overrideAttrs (old: {
-  #     src = pkgs.fetchurl {
-  #       # The generated url is wrong, it needs a ".lz"
-  #       url = "https://elpa.gnu.org/packages/auctex-${old.version}.tar.lz";
-  #       sha256 = old.src.outputHash;
-  #     };
-  #   });
-  #   # elpaPackages.auctex = auctex;
-  # };
   overrides = eself: esuper: { };
 in
 lib.mkMerge [
@@ -30,16 +20,11 @@ lib.mkMerge [
 
     my.home = { config, lib, ... }:
       lib.mkMerge [
-      # { imports = [ inputs.doom-emacs.hmModule ]; }
       {
         home.sessionPath = [ "\${HOME}/.emacs.d/bin" ];
         home.sessionVariables = {
-          # DOOMDIR = "${config.xdg.configHome}/emacs.d";
-          DOOMDIR = "\${HOME}/.doom";
-
+          DOOMDIR = "${config.xdg.configHome}/doom";
           DOOMLOCALDIR = "${config.xdg.configHome}/doom-local";
-          # DOOMLOCALDIR = "\${HOME}/.emacs.d";
-          # DOOMLOCALDIR = "\${HOME}/.emacs.d";
         };
 
         home.file = {
@@ -59,27 +44,23 @@ lib.mkMerge [
           fi
         ''}";
             };
-            ".doom/config.el".source = ./doom.d/config.el;
-            ".doom/init.el".source = ./doom.d/init.el;
-            ".doom/packages.el".source = ./doom.d/packages.el;
-            ".doom/splash.png".source = ./doom.d/splash.png;
         };
         xdg = {
           enable = true;
           configFile = {
+            "doom/config.el".source = ./doom.d/config.el;
+            "doom/init.el".source = ./doom.d/init.el;
+            "doom/packages.el".source = ./doom.d/packages.el;
+            "doom/splash.png".source = ./doom.d/splash.png;
           };
         };
 
         programs.emacs = {
           enable = true;
-          # package = pkgs.emacsPgtkGcc;
           package= lib.mkMerge [
-            (lib.mkIf isLinux pkgs.emacsPgtk)
+            (lib.mkIf isLinux pkgs.emacsPgtkGcc)
             (lib.mkIf isDarwin pkgs.emacsPgtk)
           ];
-          # package = pkgs.emacsGcc;
-          # package = pkgs.emacsGit;
-          # package = pkgs.emacs;
           extraPackages = (epkgs:
             (with epkgs; [
               # exwm
