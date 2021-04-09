@@ -59,7 +59,7 @@ lib.mkMerge [
           enable = true;
           package= lib.mkMerge [
             (lib.mkIf isLinux pkgs.emacsPgtkGcc)
-            (lib.mkIf isDarwin pkgs.emacsPgtk)
+            (lib.mkIf isDarwin pkgs.emacsPgtkGcc)
           ];
           extraPackages = (epkgs:
             (with epkgs; [
