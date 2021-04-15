@@ -128,7 +128,7 @@
                     ("^\\*Help.*" :size 82 :height 0.6 :side right :select t :quit t)
                     ("^ \\*Metahelp.*" :size 82 :side right :select t :quit t)
                     ("^\\*Apropos.*" :size 82 :height 0.6 :side right :select t :quit t)
-                    ("^\\*Messages\\*" :vslot -10 :height 10 :side 'bottom :select t :quit t :ttl nil)
+                    ("^\\*Messages\\*" :vslot -10 :height 10 :side bottom :select t :quit t :ttl nil)
 
                     ;; ("^ ?\\*NeoTree" :side ,neo-window-position :width ,neo-window-width :quit 'current :select t)
                     ("\\*VC-history\\*" :slot 2 :side right :size 82 :modeline nil :select t :quit t)
