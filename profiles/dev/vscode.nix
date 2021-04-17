@@ -105,7 +105,7 @@ in
         "workbench.list.smoothScrolling" = true;
 
         # Extension settings
-        "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}";
+        # "vscode-neovim.neovimExecutablePaths.linux" = "${config.programs.neovim.finalPackage}";
 
         # Language settings
         "[nix]"."editor.tabSize" = 2;

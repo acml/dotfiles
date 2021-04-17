@@ -1,11 +1,7 @@
 { config, inputs, lib, pkgs, ... }:
 
 let
-  toPlugin = n: v:
-    pkgs.vimUtils.buildVimPluginFrom2Nix {
-      name = n;
-      src = v;
-    };
+  toPlugin = n: v: pkgs.vimUtils.buildVimPluginFrom2Nix { name = n; src = v; };
 
   myPlugins = lib.mapAttrsToList toPlugin {
     anderson = inputs.vim-theme-anderson;
@@ -21,7 +17,7 @@ let
     };
   };
 in {
-  nixpkgs.overlays = [ inputs.neovim-nightly-overlay.overlay ];
+  nixpkgs.overlays = [ inputs.neovim-nightly.overlay ];
   my.home = {
     home.packages = [ pkgs.fzf ];
 
@@ -31,6 +27,8 @@ in {
       vimAlias = true;
       vimdiffAlias = true;
       withNodeJs = true;
+
+      # From neovim-nightly input
       package = pkgs.neovim-nightly;
 
       plugins = myPlugins ++ (with pkgs.vimPlugins;

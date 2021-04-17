@@ -7,35 +7,41 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
-    # nix-darwin.url = "github:hardselius/nix-darwin";
-    # home-manager.url= "github:berbiche/home-manager/waybar-module-css-ids-fix";
-    home-manager.url= "github:rycee/home-manager";
+    # home-manager.url= "github:berbiche/home-manager/temporary-shared-modules-fix";
+    home-manager.url= "github:nix-community/home-manager";
+    # I don't need to pin Home Manager's nixpkgs because it inherits
+    # the nixpkgs version from nix-darwin/nixos
+    #home-manager.inputs.nixpkgs.follows = "nixpkgs";
     nur = { url = "github:nix-community/nur"; flake = false; };
+    my-nur = { url = "github:berbiche/nur-packages"; flake = false; };
+    my-nixpkgs.url = "github:berbiche/nixpkgs/init-xfce4-i3-workspaces-plugin";
 
     doom-emacs.url = "github:vlaci/nix-doom-emacs";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
-    # emacs-overlay.url = "github:nix-community/emacs-overlay/e3da699893c4be3b946d3586143b03450f9680ee";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
+
+    neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
+    neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
 
     nixpkgs-mozilla = { url = "github:mozilla/nixpkgs-mozilla"; flake = false; };
     nixpkgs-wayland = {
       url = "github:colemickens/nixpkgs-wayland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
     vim-theme-monokai = { url = "github:sickill/vim-monokai"; flake = false; };
     vim-theme-anderson = { url = "github:tlhr/anderson.vim"; flake = false; };
     vim-theme-synthwave84 = { url = "github:artanikin/vim-synthwave84"; flake = false; };
     vim-theme-gruvbox = { url = "github:morhetz/gruvbox"; flake = false; };
+
+    # nixvim.url = "github:pta2002/nixvim";
+    # nixvim.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ { nixpkgs, self, ... }: let
     inherit (nixpkgs) lib;
 
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
-      # overlays = [
-      #     inputs.neovim-nightly-overlay.overlay
-      #   ];
+
     forAllPlatforms = f: lib.genAttrs platforms (platform: f platform);
 
     nixpkgsFor = forAllPlatforms (platform: import nixpkgs {
@@ -83,18 +89,20 @@
             useGlobalPkgs = true;
             verbose = true;
           };
-          my.home = {
-            config = {
-              # Inject inputs
-              _module.args.inputs = inputs;
-              _module.args.rootPath = ./.;
-              # Specify home-manager version compability
-              home.stateVersion = "21.03";
-              # Use the new systemd service activation/deactivation tool
-              # See https://github.com/nix-community/home-manager/pull/1656
-              #home.startServices = "sd-switch";
-            };
-          };
+          home-manager.sharedModules = [
+            {
+              config = {
+                # Inject inputs
+                _module.args.inputs = inputs;
+                _module.args.rootPath = ./.;
+                # Specify home-manager version compability
+                home.stateVersion = "21.03";
+                # Use the new systemd service activation/deactivation tool
+                # See https://github.com/nix-community/home-manager/pull/1656
+                #home.startServices = "sd-switch";
+              };
+            }
+          ];
         };
       in [ ./module.nix defaults ] ++ extraModules;
 
@@ -144,7 +152,6 @@
 
         darwinDefaults = { config, pkgs, lib, ... }: {
           imports = [ inputs.home-manager.darwinModules.home-manager ];
-          # nixpkgs.overlays = overlays;
           nix.gc.user = args.username;
           nix.nixPath = [
             "nixpkgs=${pkgs.path}"
@@ -195,20 +202,24 @@
     };
 
     overlays = let
+      overlayFiles' = lib.filter (lib.hasSuffix ".nix") (lib.attrNames (builtins.readDir ./overlays));
       overlayFiles = lib.listToAttrs (map (name: {
         name = lib.removeSuffix ".nix" name;
         value = import (./overlays + "/${name}");
-      }) (lib.attrNames (builtins.readDir ./overlays)));
+      }) overlayFiles');
     in overlayFiles // {
       nixpkgs-wayland = inputs.nixpkgs-wayland.overlay;
       nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
       emacsPgtk = inputs.emacs-overlay.overlay;
+      neovim-nightly = inputs.neovim-nightly.overlay;
+      # nixvim = import inputs.nixvim.nixosModules.nixvim;
+
       # nur = inputs.nur.overlay;
-      nur = final: prev: {
+      nur = final: _prev: {
         nur = import inputs.nur { nurpkgs = final; pkgs = final; };
       };
       my-nur = final: _prev: {
-        my-nur = final.nur.repos.berbiche;
+        my-nur = import inputs.my-nur { pkgs = final; };
       };
     };
 
