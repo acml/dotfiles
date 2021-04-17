@@ -33,8 +33,8 @@
     vim-theme-synthwave84 = { url = "github:artanikin/vim-synthwave84"; flake = false; };
     vim-theme-gruvbox = { url = "github:morhetz/gruvbox"; flake = false; };
 
-    # nixvim.url = "github:pta2002/nixvim";
-    # nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    nixvim.url = "github:pta2002/nixvim";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ { nixpkgs, self, ... }: let
@@ -212,7 +212,6 @@
       nixpkgs-mozilla = import inputs.nixpkgs-mozilla;
       emacsPgtk = inputs.emacs-overlay.overlay;
       neovim-nightly = inputs.neovim-nightly.overlay;
-      # nixvim = import inputs.nixvim.nixosModules.nixvim;
 
       # nur = inputs.nur.overlay;
       nur = final: _prev: {
