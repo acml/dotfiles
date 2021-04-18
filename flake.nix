@@ -18,7 +18,7 @@
 
     doom-emacs.url = "github:vlaci/nix-doom-emacs";
     doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
-    emacs-overlay.url = "github:nix-community/emacs-overlay";
+    emacs-overlay.url = "github:nix-community/emacs-overlay/2c021bc47ea0247129481402df8d6b0dee52d934";
 
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
     neovim-nightly.inputs.nixpkgs.follows = "nixpkgs";
