@@ -74,6 +74,13 @@ in {
           #
           # Gutter with  mode
           vim-signify
+
+          plenary-nvim # required for telescope-nvim and gitsigns.nvim
+          popup-nvim # required for telescope-nvim
+          telescope-nvim
+          telescope-symbols-nvim
+          telescope-z-nvim
+          nvim-web-devicons
         ] ++ lib.optional config.profiles.dev.wakatime.enable vim-wakatime);
 
       extraConfig = ''
@@ -142,7 +149,7 @@ in {
         let g:fzf_buffers_jump = 1
         nnoremap <C-t> :FzfFiles!
         nnoremap <leader><space> :FzfFiles<CR>
-        nnoremap <leader>. :FzfFiles %:p:h<CR>
+        " nnoremap <leader>. :FzfFiles %:p:h<CR>
 
 
         " Insert line above
@@ -171,7 +178,7 @@ in {
 
         " Finding things
         nnoremap <leader>ss :FzfBLines<CR>
-        nnoremap <leader>sp :FzfRg<CR>
+        "nnoremap <leader>sp :FzfRg<CR>
 
         " Git
         nnoremap <silent> <leader>gg :Gstatus<CR>
@@ -207,6 +214,16 @@ in {
           \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
 
         au FileType gitcommit setlocal tw=68 colorcolumn=69 spell
+
+        " Using lua functions
+        nnoremap <leader>. <cmd>lua require('telescope.builtin').find_files()<cr>
+        nnoremap <leader>sd <cmd>lua require('telescope.builtin').live_grep()<cr>
+        nnoremap <leader>, <cmd>lua require('telescope.builtin').buffers()<cr>
+        nnoremap <leader>fr <cmd>lua require('telescope.builtin').oldfiles()<cr>
+        nnoremap <leader>hW <cmd>lua require('telescope.builtin').man_pages()<cr>
+        nnoremap <leader>ss <cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>
+        nnoremap <leader>: <cmd>lua require('telescope.builtin').commands()<cr>
+        nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
       '';
     };
   };
