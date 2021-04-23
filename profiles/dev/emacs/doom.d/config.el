@@ -40,7 +40,11 @@
       doom-variable-pitch-font (font-spec :family "Overpass Nerd Font" :size 13)
       doom-serif-font (font-spec :family "BlexMono Nerd Font" :weight 'light)
 
-      fancy-splash-image (concat doom-private-dir "splash.png")
+      fancy-splash-image (let ((alternatives '("doom-emacs-bw-light.svg"
+                                               "doom-emacs-flugo-slant_out_purple-small.png"
+                                               "doom-emacs-flugo-slant_out_bw-small.png")))
+                           (concat doom-private-dir "splash/"
+                                   (nth (random (length alternatives)) alternatives)))
 
       auth-sources '("~/.authinfo.gpg")
       auth-source-cache-expiry nil ; default is 7200 (2h)
@@ -213,9 +217,6 @@
 ;;                                  (+ (point) magic-mode-regexp-match-limit) t)))))
 ;; (add-to-list 'magic-mode-alist '(ac/make-mode-p . makefile-mode))
 
-(setq-default
- delete-by-moving-to-trash t)
-
 ;; (windmove-default-keybindings 'control)
 ;; (windswap-default-keybindings 'control 'shift)
 ;; (add-hook 'org-shiftup-final-hook 'windmove-up)
@@ -301,8 +302,7 @@
 (add-hook! dired-mode
   (dired-hide-details-mode 1)
   ;; (dired-show-readme-mode 1)
-  (dired-auto-readme-mode 1)
-  )
+  (dired-auto-readme-mode 1))
 
 (use-package! dired-subtree
   :after dired
@@ -317,7 +317,8 @@
     :desc "Toggle subtree" :n [tab] #'dired-subtree-toggle)))
 
 (after! dired
-  (dired-async-mode 1)
+  (unless (memq system-type '(darwin))
+    (dired-async-mode 1))
   ;; Define localleader bindings
   (map!
    ;; Define or redefine dired bindings
@@ -432,38 +433,73 @@
 
 (use-package! modus-themes
   :init
-  ;; Set customization options to values of your choice
   (setq modus-themes-slanted-constructs t
         modus-themes-bold-constructs t
-        modus-themes-variable-pitch-headings t
-        modus-themes-variable-pitch-ui t
         modus-themes-no-mixed-fonts nil
-        modus-themes-headings
-        '((1 . section)
-          (2 . section-no-bold)
-          (3 . rainbow-line)
-          (t . rainbow-line-no-bold))
-        modus-themes-scale-headings t
-        modus-themes-fringes nil
-        modus-themes-lang-checkers nil
-        modus-themes-org-blocks nil
-        modus-themes-org-habit nil
-        modus-themes-prompts 'subtle-accented
-        modus-themes-mode-line 'borderless-3d
-        modus-themes-diffs 'desaturated
-        modus-themes-syntax 'faint
-        modus-themes-hl-line 'accented-background
         modus-themes-subtle-line-numbers t
-        modus-themes-paren-match 'subtle-bold
-        modus-themes-region 'bg-only-no-extend
-        modus-themes-links 'faint-neutral-underline
-        modus-themes-completions 'opinionated
 
-        modus-themes-scale-1 1.05
-        modus-themes-scale-2 1.1
-        modus-themes-scale-3 1.15
-        modus-themes-scale-4 1.2
-        modus-themes-scale-5 1.3)
+        modus-themes-fringes nil ; {nil,'subtle,'intense}
+
+        ;; Options for `modus-themes-lang-checkers': nil,
+        ;; 'straight-underline, 'subtle-foreground,
+        ;; 'subtle-foreground-straight-underline, 'intense-foreground,
+        ;; 'intense-foreground-straight-underline, 'colored-background
+        modus-themes-lang-checkers nil
+
+        ;; Options for `modus-themes-mode-line': nil, '3d, 'moody,
+        ;; 'borderless, 'borderless-3d, 'borderless-moody, 'accented,
+        ;; 'accented-3d, 'accented-moody
+        modus-themes-mode-line 'borderless-3d
+
+        ;; Options for `modus-themes-syntax': nil, 'faint,
+        ;; 'yellow-comments, 'green-strings,
+        ;; 'yellow-comments-green-strings, 'alt-syntax,
+        ;; 'alt-syntax-yellow-comments, 'faint-yellow-comments
+        modus-themes-syntax 'faint
+
+        ;; Options for `modus-themes-hl-line': nil, 'intense-background,
+        ;; 'accented-background, 'underline-neutral,
+        ;; 'underline-accented, 'underline-only-neutral,
+        ;; 'underline-only-accented
+        modus-themes-hl-line 'accented-background
+
+        modus-themes-paren-match 'subtle-bold ; {nil,'subtle-bold,'intense,'intense-bold}
+
+        ;; Options for `modus-themes-links': nil, 'faint,
+        ;; 'neutral-underline, 'faint-neutral-underline, 'no-underline,
+        ;; 'underline-only, 'neutral-underline-only
+        modus-themes-links 'faint-neutral-underline
+
+        ;; Options for `modus-themes-prompts': nil, 'subtle-accented,
+        ;; 'intense-accented, 'subtle-gray, 'intense-gray
+        modus-themes-prompts 'subtle-accented
+
+        modus-themes-completions 'opinionated ; {nil,'moderate,'opinionated}
+
+        ;; Options for `modus-themes-region': nil, 'no-extend, 'bg-only,
+        ;; 'bg-only-no-extend, 'accent, 'accent-no-extend
+        modus-themes-region 'bg-only-no-extend
+
+        ;; Options for `modus-themes-diffs': nil, 'desaturated,
+        ;; 'bg-only, 'deuteranopia, 'fg-only-deuteranopia
+        modus-themes-diffs 'desaturated
+
+        modus-themes-org-blocks nil ; {nil,'grayscale,'rainbow}
+        modus-themes-org-habit nil ; {nil,'simplified,'traffic-light}
+
+        modus-themes-headings ; this is an alist: read the manual or its doc string
+        '((1 . line)
+          (2 . rainbow-line-no-bold)
+          (t . no-bold))
+
+        modus-themes-variable-pitch-ui t
+        modus-themes-variable-pitch-headings t
+        modus-themes-scale-headings t
+        modus-themes-scale-1 1.1
+        modus-themes-scale-2 1.15
+        modus-themes-scale-3 1.21
+        modus-themes-scale-4 1.27
+        modus-themes-scale-5 1.33)
 
   ;; Load the theme files before enabling a theme
   (modus-themes-load-themes)

@@ -11,10 +11,10 @@ lib.mkMerge [
   {
     environment.variables.EDITOR = "emacsclient -tc";
     environment.variables.ALTERNATE_EDITOR = "emacs";
-    environment.shellAliases = {
-      vim = "emacsclient -nw";
-      e   = "emacsclient -nw";
-    };
+    # environment.shellAliases = {
+    #   vim = "emacsclient -nw";
+    #   e   = "emacsclient -nw";
+    # };
 
     nixpkgs.overlays = [ inputs.emacs-overlay.overlay ];
 
@@ -48,10 +48,10 @@ lib.mkMerge [
         xdg = {
           enable = true;
           configFile = {
-            "doom/config.el".source = ./doom.d/config.el;
-            "doom/init.el".source = ./doom.d/init.el;
-            "doom/packages.el".source = ./doom.d/packages.el;
-            "doom/splash.png".source = ./doom.d/splash.png;
+            "doom" = {
+              source = ./doom.d;
+              recursive = true;
+            };
           };
         };
 
@@ -103,7 +103,7 @@ lib.mkMerge [
           # Create a new frame in the default daemon
           e = "run_emacs default -n -c";
           # Create a new terminal (TTY) frame in the default daemon
-          en = "run_emacs default -t";
+          et = "run_emacs default -t";
           # Open a new frame in the `mail` daemon, and start notmuch in the frame
           em = "run_emacs mail -n -c -e '(notmuch-hello)'";
         };
@@ -127,7 +127,6 @@ lib.mkMerge [
           ## Module dependencies
           # :checkers spell
           (aspellWithDicts (dicts: with dicts; [ en en-computers en-science tr ]))
-          enchant
           # :checkers grammar
           languagetool
           # :tools editorconfig
