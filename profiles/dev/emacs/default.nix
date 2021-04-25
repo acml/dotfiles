@@ -191,5 +191,5 @@ lib.mkMerge [
     ];
   }
   # Darwin launchd service for Emacs
-  (lib.mkIf isDarwin { services.emacs.enable = true; })
+  (lib.mkIf isDarwin { services.emacs.enable = false; })
 ]

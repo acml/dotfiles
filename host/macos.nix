@@ -23,7 +23,6 @@ in
 
   programs.fish.enable = false;
   programs.zsh.enable = true;
-  services.emacs.enable = true;
 
   # fonts
   fonts = {

@@ -30,7 +30,7 @@ let
 
     alacritty = "${pkgs.alacritty}/bin/alacritty";
     # emacs = "emacsclient -a '' -nc";
-    emacs = "env DOOMDIR=\${HOME}/.config/doom DOOMLOCALDIR=\${HOME}/.config/doom-local emacsclient -a '' -nc";
+    emacs = "env DOOMDIR=\${HOME}/.config/doom DOOMLOCALDIR=\${HOME}/.config/doom-local emacsclient -s default -a '' -nc";
   };
 
   # Helpers
