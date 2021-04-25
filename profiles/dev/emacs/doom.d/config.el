@@ -317,8 +317,6 @@
     :desc "Toggle subtree" :n [tab] #'dired-subtree-toggle)))
 
 (after! dired
-  (unless (memq system-type '(darwin))
-    (dired-async-mode 1))
   ;; Define localleader bindings
   (map!
    ;; Define or redefine dired bindings
