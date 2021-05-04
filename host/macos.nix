@@ -42,6 +42,7 @@ in
           # "Noto"
           "Overpass"
           # "RobotoMono"
+          "SourceCodePro"
           # "Ubuntu"
         ];
       })

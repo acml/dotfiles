@@ -44,7 +44,7 @@ in
       font = let
         # These settings don't get merged because settings == types.attrs
         defaultFont = lib.mkMerge [
-          (lib.mkIf isDarwin "Iosevka Nerd Font Mono")
+          (lib.mkIf isDarwin "SauceCodePro Nerd Font Mono")
           (lib.mkIf (!isDarwin) "Iosevka")
         ];
       in {

@@ -52,7 +52,6 @@ in {
       # nvim plugin providers
       withNodeJs = true;
       withRuby = true;
-      withPython = true;
       withPython3 = true;
 
       # share vim plugins since nothing is specific to nvim
