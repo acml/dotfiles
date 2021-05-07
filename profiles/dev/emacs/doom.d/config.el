@@ -357,7 +357,7 @@
 (use-package! journalctl-mode)
 
 (setq +format-on-save-enabled-modes
-      '(go-mode))
+      '(go-mode nix-mode))
 
 (after! lsp-go
   (lsp-register-custom-settings
