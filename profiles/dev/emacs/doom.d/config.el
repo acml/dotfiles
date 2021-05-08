@@ -46,39 +46,16 @@
                            (concat doom-private-dir "splash/"
                                    (nth (random (length alternatives)) alternatives)))
 
-      auth-sources '("~/.authinfo.gpg")
       auth-source-cache-expiry nil ; default is 7200 (2h)
-
-      calendar-location-name "Istanbul, Turkey"
-      calendar-latitude 41.168602
-      calendar-longitude 29.047024
 
       delete-by-moving-to-trash t  ; Delete files to trash
       window-combination-resize t  ; take new window space from all other windows (not just current)
       x-stretch-cursor t           ; Stretch cursor to the glyph width
       undo-limit 80000000          ; Raise undo-limit to 80Mb
-      evil-want-fine-undo t        ; By default while in insert all changes are one big blob. Be more granular
       auto-save-default t          ; Nobody likes to loose work, I certainly don't
       truncate-string-ellipsis "…" ; Unicode ellispis are nicer than "...", and also save /precious/ space
 
-      ;; Switch to the new window after splitting
-      evil-vsplit-window-right t
-      evil-split-window-below t
-
-      +ivy-buffer-preview t
-
-      ;; If you use `org' and don't want your org files in the default location below,
-      ;; change `org-directory'. It must be set before org loads!
-      org-directory "~/Documents/org/"
-      ;; ;; ;; org-noter-notes-search-path '("~/Documents/org/notes/")
-      ;; org-archive-location (concat org-directory ".archive/%s::")
-      ;; org-roam-directory (concat org-directory "notes/")
-      ;; org-roam-db-location (concat org-roam-directory ".org-roam.db")
-      ;; org-journal-encrypt-journal t
-      ;; org-journal-file-format "%Y%m%d.org"
-      ;; org-startup-folded 'overview
-      ;; org-ellipsis " [...] "
-      )
+      frame-resize-pixelwise t)
 
 ;; (if (equal "Battery status not available"
 ;;            (battery))
@@ -108,17 +85,38 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+(custom-set-faces!
+  '(aw-leading-char-face
+    :foreground "white" :background "red"
+    :weight bold :height 2.5 :box (:line-width 10 :color "red")))
+
 ;; Prevents some cases of Emacs flickering
 (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
-(add-to-list 'default-frame-alist '(alpha . (95)))
-(set-frame-parameter (selected-frame) 'alpha '(95))
+;; (add-to-list 'default-frame-alist '(alpha . (95)))
+;; (set-frame-parameter (selected-frame) 'alpha '(95))
 
 (when (daemonp)
   (add-hook 'after-make-frame-functions
             (lambda (frame)
               (with-selected-frame frame
-                (modus-themes-load-operandi)))))
+                ;; (load-theme 'doom-one t)
+                (modus-themes-load-operandi)
+                ))))
+
+;; (windmove-default-keybindings 'control)
+;; (windswap-default-keybindings 'control 'shift)
+;; (add-hook 'org-shiftup-final-hook 'windmove-up)
+;; (add-hook 'org-shiftleft-final-hook 'windmove-left)
+;; (add-hook 'org-shiftdown-final-hook 'windmove-down)
+;; (add-hook 'org-shiftright-final-hook 'windmove-right)
+
+;; (add-to-list 'term-file-aliases
+;;              '("alacritty" . "xterm-256color"))
+
+(map! "M-c" #'capitalize-dwim
+      "M-l" #'downcase-dwim
+      "M-u" #'upcase-dwim)
 
 (set-popup-rules! '(("^\\*Customize.*" :slot 2 :side right :modeline nil :select t :quit t)
                     (" \\*undo-tree\\*" :slot 2 :side left :size 20 :modeline nil :select t :quit t)
@@ -145,17 +143,16 @@
                     ;; ** python
                     ("^\\*Anaconda\\*" :side right :size 82 :quit t :ttl t)))
 
-(after! ivy-posframe
-  (setq ivy-posframe-border-width 3))
+(after! avy
+  (setq avy-all-windows 'all-frames))
 
-(after! persp-mode
-  (setq persp-emacsclient-init-frame-behaviour-override nil)
-  (defun display-workspaces-in-minibuffer ()
-    (with-current-buffer " *Minibuf-0*"
-      (erase-buffer)
-      (insert (+workspace--tabline))))
-  (run-with-idle-timer 1 t #'display-workspaces-in-minibuffer)
-  (+workspace/display))
+(use-package! beginend
+  :init (beginend-global-mode))
+
+(after! calendar
+  (setq calendar-location-name "Istanbul, Turkey"
+        calendar-latitude 41.168602
+        calendar-longitude 29.047024))
 
 ;; (defconst ac/c-or-c++-mode--regexp
 ;;   (eval-when-compile
@@ -217,73 +214,10 @@
 ;;                                  (+ (point) magic-mode-regexp-match-limit) t)))))
 ;; (add-to-list 'magic-mode-alist '(ac/make-mode-p . makefile-mode))
 
-;; (windmove-default-keybindings 'control)
-;; (windswap-default-keybindings 'control 'shift)
-;; (add-hook 'org-shiftup-final-hook 'windmove-up)
-;; (add-hook 'org-shiftleft-final-hook 'windmove-left)
-;; (add-hook 'org-shiftdown-final-hook 'windmove-down)
-;; (add-hook 'org-shiftright-final-hook 'windmove-right)
-
-(add-to-list 'term-file-aliases
-             '("alacritty" . "xterm-256color"))
-
-; Each path is relative to `+mu4e-mu4e-mail-path', which is ~/.mail by default
-(after! mu4e
-  (set-email-account! "yahoo"
-                      '((mu4e-sent-folder       . "/Yahoo/Sent")
-                        (mu4e-drafts-folder     . "/Yahoo/Draft")
-                        (mu4e-trash-folder      . "/Yahoo/Trash")
-                        (mu4e-refile-folder     . "/Yahoo/Archive")
-                        (smtpmail-smtp-user     . "ozgezer@yahoo.com")
-                        (mu4e-compose-signature . "---\nAhmet Cemal Özgezer")))
-  (set-email-account! "gmail"
-                      '((mu4e-sent-folder       . "/Gmail/[Gmail]/Sent Mail")
-                        (mu4e-drafts-folder     . "/Gmail/[Gmail]/Drafts")
-                        (mu4e-trash-folder      . "/Gmail/[Gmail]/Trash")
-                        (mu4e-refile-folder     . "/Gmail/[Gmail]/Archive")
-                        (smtpmail-smtp-user     . "ozgezer@gmail.com")
-                        (mu4e-compose-signature . "---\nAhmet Cemal Özgezer")))
-  (set-email-account! "msn"
-                      '((mu4e-sent-folder       . "/MSN/Sent")
-                        (mu4e-drafts-folder     . "/MSN/Drafts")
-                        (mu4e-trash-folder      . "/MSN/Deleted")
-                        (mu4e-refile-folder     . "/MSN/Archive")
-                        (smtpmail-smtp-user     . "ozgezer@msn.com")
-                        (mu4e-compose-signature . "---\nAhmet Cemal Özgezer")))
-  (set-email-account! "andasis"
-                      '((mu4e-sent-folder       . "/Andasis/Sent Items")
-                        (mu4e-drafts-folder     . "/Andasis/Drafts")
-                        (mu4e-trash-folder      . "/Andasis/Trash")
-                        (mu4e-refile-folder     . "/Andasis/Archives")
-                        (smtpmail-smtp-user     . "ahmet.ozgezer@andasis.com")
-                        (mu4e-compose-signature . "---\nAhmet Cemal Özgezer"))
-                      t))
-
 (after! ccls
   (setq ccls-initialization-options `(:index (:comments 2)
                                       :completion (:detailedLabel t)
                                       :cache (:directory ,(file-truename "~/.cache/ccls")))))
-
-(map! "M-c" #'capitalize-dwim
-      "M-l" #'downcase-dwim
-      "M-u" #'upcase-dwim)
-
-;; (setq spacemacs-path doom-modules-dir)
-;; (load! (concat spacemacs-path "spacemacs/+spacemacs"))
-
-;; (setq comp-deferred-compilation t)
-
-(custom-set-faces!
-  '(aw-leading-char-face
-    :foreground "white" :background "red"
-    :weight bold :height 2.5 :box (:line-width 10 :color "red")))
-
-(use-package! avy
-  :init
-  (setq avy-all-windows t))
-
-(use-package! beginend :defer t
-  :init (beginend-global-mode))
 
 (use-package! daemons
   :config
@@ -297,6 +231,10 @@
 ;; Hook up dired-x global bindings without loading it up-front
 (define-key ctl-x-map "\C-j" 'dired-jump)
 (define-key ctl-x-4-map "\C-j" 'dired-jump-other-window)
+
+(use-package! dired-auto-readme
+  :config
+  (appendq! dired-auto-readme-files '("README.rst" "readme.rst")))
 
 (setq dired-hide-details-hide-symlink-targets t)
 (add-hook! dired-mode
@@ -347,6 +285,17 @@
                            (- (/ width 2)))
                         (+ emacs-everywhere-window-y
                            (/ emacs-everywhere-window-height 2)))))
+
+(after! evil
+  (setq
+   evil-want-fine-undo t       ; By default while in insert all changes are one big blob. Be more granular
+   evil-vsplit-window-right t  ; Switch to the new window after splitting
+   evil-split-window-below t))
+
+(after! format-all
+  (setq +format-on-save-enabled-modes
+      '(go-mode)))
+
 (use-package! highlight-parentheses
   :init
   (add-hook 'prog-mode-hook #'highlight-parentheses-mode)
@@ -354,25 +303,30 @@
   :config
   (set-face-attribute 'hl-paren-face nil :weight 'ultra-bold))
 
-(use-package! journalctl-mode)
+(after! ivy
+  (setq +ivy-buffer-preview t
+        ivy-use-virtual-buffers t
+        ivy-re-builders-alist
+        '((swiper . ivy--regex-plus)
+          (counsel-rg . ivy--regex-plus)
+          (t      . ivy--regex-fuzzy))))
 
-(setq +format-on-save-enabled-modes
-      '(go-mode nix-mode))
+(after! ivy-posframe
+  (setq ivy-posframe-border-width 3))
+
+(use-package! journalctl-mode)
 
 (after! lsp-go
   (lsp-register-custom-settings
    '(("gopls.experimentalWorkspaceModule" t t))))
 
-(when nil
-(use-package! lsp-mode
-  :config
+(after! lsp-mode
   (setq lsp-headerline-breadcrumb-enable t
         ;; lsp-lens-enable t
         ;; lsp-enable-file-watchers t
         ;; lsp-signature-auto-activate nil
         ;; lsp-completion-use-last-result nil
         ))
-) ; when nil
 
 (add-hook! ('magit-mode-hook 'text-mode-hook 'prog-mode-hook)
            (defun acml/set-fringe-widths ()
@@ -390,44 +344,8 @@
       magit-save-repository-buffers nil
       ;; Don't restore the wconf after quitting magit, it's jarring
       magit-inhibit-save-previous-winconf t
-      transient-values '((magit-rebase "--autosquash")
-                         (magit-pull "--rebase")))
-
-(use-package! turkish
-  :commands (turkish-mode)
-  ;; :init (evil-leader/set-key (kbd "ot") 'turkish-mode)
-  )
-
-(after! counsel-projectile
-  (setq counsel-projectile-switch-project-action 'counsel-projectile-switch-project-action-dired))
-
-(after! projectile
-  (setq projectile-switch-project-action 'projectile-dired
-        projectile-enable-caching t
-        projectile-project-search-path '("~/Projects/")
-        ;; Follow suggestion to reorder root functions to find the .projectile file
-        ;; https://old.reddit.com/r/emacs/comments/920psp/projectile_ignoring_projectile_files/
-        ;; projectile-project-root-files-functions #'(projectile-root-top-down
-        ;;                                            projectile-root-top-down-recurring
-        ;;                                            projectile-root-bottom-up
-        ;;                                            projectile-root-local)
-        )
-  (projectile-register-project-type
-   'gimsa '("build.sh")
-   :compile "./build.sh"
-   :compilation-dir ".")
-  (projectile-register-project-type
-   'linux '("COPYING" "CREDITS" "Kbuild" "Kconfig" "MAINTAINERS" "Makefile" "README")
-   :compile "make O=am43xx_evm ARCH=arm CROSS_COMPILE=arm-openwrt-linux-gnueabi- all"
-   :compilation-dir ".")
-  (projectile-register-project-type
-   'openwrt '("BSDmakefile" "Config.in" "feeds.conf.default" "LICENSE" "Makefile" "README" "rules.mk" "version.date")
-   :compile "make world"
-   :compilation-dir ".")
-  (projectile-register-project-type
-   'u-boot '("config.mk" "Kbuild" "Kconfig" "MAINTAINERS" "MAKEALL" "Makefile" "README" "snapshot.commit")
-   :compile "make O=am43xx_evm ARCH=arm CROSS_COMPILE=arm-openwrt-linux-gnueabi- all"
-   :compilation-dir "."))
+      transient-values '((magit-rebase "--autosquash" "--autostash")
+                         (magit-pull "--rebase" "--autostash")))
 
 (use-package! modus-themes
   :init
@@ -510,6 +428,93 @@
   :bind ("<f5>" . modus-themes-toggle)
   )
 
+; Each path is relative to `+mu4e-mu4e-mail-path', which is ~/.mail by default
+(after! mu4e
+  (set-email-account! "yahoo"
+                      '((mu4e-sent-folder       . "/Yahoo/Sent")
+                        (mu4e-drafts-folder     . "/Yahoo/Draft")
+                        (mu4e-trash-folder      . "/Yahoo/Trash")
+                        (mu4e-refile-folder     . "/Yahoo/Archive")
+                        (smtpmail-smtp-user     . "ozgezer@yahoo.com")
+                        (mu4e-compose-signature . "---\nAhmet Cemal Özgezer")))
+  (set-email-account! "gmail"
+                      '((mu4e-sent-folder       . "/Gmail/[Gmail]/Sent Mail")
+                        (mu4e-drafts-folder     . "/Gmail/[Gmail]/Drafts")
+                        (mu4e-trash-folder      . "/Gmail/[Gmail]/Trash")
+                        (mu4e-refile-folder     . "/Gmail/[Gmail]/Archive")
+                        (smtpmail-smtp-user     . "ozgezer@gmail.com")
+                        (mu4e-compose-signature . "---\nAhmet Cemal Özgezer")))
+  (set-email-account! "msn"
+                      '((mu4e-sent-folder       . "/MSN/Sent")
+                        (mu4e-drafts-folder     . "/MSN/Drafts")
+                        (mu4e-trash-folder      . "/MSN/Deleted")
+                        (mu4e-refile-folder     . "/MSN/Archive")
+                        (smtpmail-smtp-user     . "ozgezer@msn.com")
+                        (mu4e-compose-signature . "---\nAhmet Cemal Özgezer")))
+  (set-email-account! "andasis"
+                      '((mu4e-sent-folder       . "/Andasis/Sent Items")
+                        (mu4e-drafts-folder     . "/Andasis/Drafts")
+                        (mu4e-trash-folder      . "/Andasis/Trash")
+                        (mu4e-refile-folder     . "/Andasis/Archives")
+                        (smtpmail-smtp-user     . "ahmet.ozgezer@andasis.com")
+                        (mu4e-compose-signature . "---\nAhmet Cemal Özgezer"))
+                      t))
+
+(after! org
+  (setq
+   ;; If you use `org' and don't want your org files in the default location below,
+   ;; change `org-directory'. It must be set before org loads!
+   org-directory "~/Documents/org/"
+   ;; ;; ;; org-noter-notes-search-path '("~/Documents/org/notes/")
+   ;; org-archive-location (concat org-directory ".archive/%s::")
+   ;; org-roam-directory (concat org-directory "notes/")
+   ;; org-roam-db-location (concat org-roam-directory ".org-roam.db")
+   ;; org-journal-encrypt-journal t
+   ;; org-journal-file-format "%Y%m%d.org"
+   ;; org-startup-folded 'overview
+   ;; org-ellipsis " [...] "
+   ))
+
+(after! persp-mode
+  (setq persp-emacsclient-init-frame-behaviour-override nil)
+  (defun display-workspaces-in-minibuffer ()
+    (with-current-buffer " *Minibuf-0*"
+      (erase-buffer)
+      (insert (+workspace--tabline))))
+  (run-with-idle-timer 1 t #'display-workspaces-in-minibuffer)
+  (+workspace/display))
+
+(after! counsel-projectile
+  (setq counsel-projectile-switch-project-action 'counsel-projectile-switch-project-action-dired))
+
+(after! projectile
+  (setq projectile-switch-project-action 'projectile-dired
+        projectile-enable-caching t
+        projectile-project-search-path '("~/Projects/")
+        ;; Follow suggestion to reorder root functions to find the .projectile file
+        ;; https://old.reddit.com/r/emacs/comments/920psp/projectile_ignoring_projectile_files/
+        ;; projectile-project-root-files-functions #'(projectile-root-top-down
+        ;;                                            projectile-root-top-down-recurring
+        ;;                                            projectile-root-bottom-up
+        ;;                                            projectile-root-local)
+        )
+  (projectile-register-project-type
+   'gimsa '("build.sh")
+   :compile "./build.sh"
+   :compilation-dir ".")
+  (projectile-register-project-type
+   'linux '("COPYING" "CREDITS" "Kbuild" "Kconfig" "MAINTAINERS" "Makefile" "README")
+   :compile "make O=am43xx_evm ARCH=arm CROSS_COMPILE=arm-openwrt-linux-gnueabi- all"
+   :compilation-dir ".")
+  (projectile-register-project-type
+   'openwrt '("BSDmakefile" "Config.in" "feeds.conf.default" "LICENSE" "Makefile" "README" "rules.mk" "version.date")
+   :compile "make world"
+   :compilation-dir ".")
+  (projectile-register-project-type
+   'u-boot '("config.mk" "Kbuild" "Kconfig" "MAINTAINERS" "MAKEALL" "Makefile" "README" "snapshot.commit")
+   :compile "make O=am43xx_evm ARCH=arm CROSS_COMPILE=arm-openwrt-linux-gnueabi- all"
+   :compilation-dir "."))
+
 (use-package! rainbow-mode
   :hook
   ((prog-mode . rainbow-mode)
@@ -519,43 +524,31 @@
   :config
   (add-to-list 'evil-emacs-state-modes 'trashed-mode))
 
-(when nil
-(use-package! treemacs
-  :init
-  (defvar treemacs-no-load-time-warnings t)
-  :config
-  (setq treemacs-collapse-dirs (if (executable-find "python") 3 0)
-        treemacs-eldoc-display t
-        treemacs-is-never-other-window t
-        treemacs-recenter-after-file-follow t
-        treemacs-recenter-after-project-expand 'on-distance
-        treemacs-show-hidden-files t
-        treemacs-silent-filewatch t
-        treemacs-silent-refresh t
-        treemacs-sorting 'alphabetic-asc
-        treemacs-user-mode-line-format 'none
-        treemacs-width 40
-        treemacs-follow-after-init t)
+(setq +treemacs-git-mode 'deferred
+      ;; treemacs-collapse-dirs 5
+      ;; treemacs-eldoc-display t
+      ;; treemacs-is-never-other-window nil
+      treemacs-recenter-after-file-follow 'on-distance
+      treemacs-recenter-after-project-expand 'on-distance
+      ;; treemacs-show-hidden-files t
+      ;; treemacs-silent-filewatch t
+      ;; treemacs-silent-refresh t
+      ;; treemacs-sorting 'alphabetic-asc
+      ;; treemacs-user-mode-line-format nil
+      treemacs-width 40
+      ;; treemacs-follow-after-init t
+      )
 
-  ;; set the correct python3 executable path. This is needed for
-  ;; treemacs-git-mode extended
-  (setq treemacs-python-executable (executable-find "python"))
-
+(after! treemacs
   ;; highlight current line in fringe for treemacs window
-  (treemacs-fringe-indicator-mode)
-
+  (treemacs-fringe-indicator-mode 'always)
   (treemacs-follow-mode t)
-  (treemacs-filewatch-mode t)
+  (treemacs-filewatch-mode t))
 
-  (pcase (cons (not (null (executable-find "git")))
-               (not (null treemacs-python-executable)))
-    (`(t . t)
-     (progn
-       (setq +treemacs-git-mode 'deferred)
-       (treemacs-git-mode 'deferred)))
-    (`(t . _)
-     (treemacs-git-mode 'simple))))
-) ; when nil
+(use-package! turkish
+  :commands (turkish-mode)
+  ;; :init (evil-leader/set-key (kbd "ot") 'turkish-mode)
+  )
 
 (use-package! vterm
   :config
@@ -567,3 +560,6 @@
          ("C-<f5>" . ztree-diff))
   :init (setq ztree-draw-unicode-lines t
               ztree-show-number-of-children t))
+
+;; (setq spacemacs-path doom-modules-dir)
+;; (load! (concat spacemacs-path "spacemacs/+spacemacs"))
