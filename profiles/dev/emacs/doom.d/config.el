@@ -329,9 +329,9 @@
         ))
 
 (add-hook! ('magit-mode-hook 'text-mode-hook 'prog-mode-hook)
-           (defun acml/set-fringe-widths ()
-             (setq-local left-fringe-width 8
-                         right-fringe-width 8)))
+  (defun acml/set-fringe-widths ()
+    (setq-local left-fringe-width 8
+                right-fringe-width 8)))
 
 ;;; :tools magit
 (after! magit
@@ -540,6 +540,9 @@
       )
 
 (after! treemacs
+  (add-hook! '(treemacs-mode-hook treemacs-select-hook)
+    (defun acml/set-treemacs-fringes ()
+      (set-window-fringes nil 8)))
   ;; highlight current line in fringe for treemacs window
   (treemacs-fringe-indicator-mode 'always)
   (treemacs-follow-mode t)
