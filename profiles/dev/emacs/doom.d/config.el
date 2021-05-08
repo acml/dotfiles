@@ -536,7 +536,7 @@
       ;; treemacs-sorting 'alphabetic-asc
       ;; treemacs-user-mode-line-format nil
       treemacs-width 40
-      ;; treemacs-follow-after-init t
+      treemacs-follow-after-init t
       )
 
 (after! treemacs
