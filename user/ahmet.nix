@@ -87,7 +87,7 @@ lib.mkMerge [
 
       # XDG
       fonts.fontconfig.enable = lib.mkForce true;
-      programs.emacs.enable = true;
+      # programs.emacs.enable = true;
     };
   }
 ]

@@ -91,7 +91,7 @@
     :weight bold :height 2.5 :box (:line-width 10 :color "red")))
 
 ;; Prevents some cases of Emacs flickering
-(add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
+;; (add-to-list 'default-frame-alist '(inhibit-double-buffering . t))
 
 ;; (add-to-list 'default-frame-alist '(alpha . (95)))
 ;; (set-frame-parameter (selected-frame) 'alpha '(95))
@@ -232,10 +232,6 @@
 (define-key ctl-x-map "\C-j" 'dired-jump)
 (define-key ctl-x-4-map "\C-j" 'dired-jump-other-window)
 
-(use-package! dired-auto-readme
-  :config
-  (appendq! dired-auto-readme-files '("README.rst" "readme.rst")))
-
 (setq dired-hide-details-hide-symlink-targets t)
 (add-hook! dired-mode
   (dired-hide-details-mode 1)
@@ -311,8 +307,19 @@
           (counsel-rg . ivy--regex-plus)
           (t      . ivy--regex-fuzzy))))
 
-(after! ivy-posframe
-  (setq ivy-posframe-border-width 3))
+;; (after! ivy-posframe
+;;   (setf (alist-get t ivy-posframe-display-functions-alist)
+;;         #'ivy-posframe-display-at-frame-top-center)
+;;   (setf (alist-get 'swiper ivy-posframe-display-functions-alist)
+;;         #'ivy-posframe-display-at-frame-top-center)
+;;   (setq ivy-posframe-border-width 1
+;;         ivy-posframe-parameters (append ivy-posframe-parameters '((left-fringe . 3)
+;;                                                                   (right-fringe . 3)))))
+
+(add-hook! 'ivy-posframe-mode-hook
+  (setq ivy-posframe-border-width 1
+        ivy-posframe-parameters (append ivy-posframe-parameters '((left-fringe . 3)
+                                                                  (right-fringe . 3)))))
 
 (use-package! journalctl-mode)
 
@@ -328,12 +335,21 @@
         ;; lsp-completion-use-last-result nil
         ))
 
-(add-hook! ('magit-mode-hook 'text-mode-hook 'prog-mode-hook)
+(add-hook! ('text-mode-hook 'prog-mode-hook)
   (defun acml/set-fringe-widths ()
-    (setq-local left-fringe-width 8
-                right-fringe-width 8)))
+    (setq-local left-fringe-width 6
+                right-fringe-width 6)))
 
 ;;; :tools magit
+;;; does not work if converted to add-hook!
+(add-hook 'magit-mode-hook
+  (lambda ()
+    (setq-local left-fringe-width 16
+                magit-section-visibility-indicator (if (display-graphic-p)
+                                                       '(magit-fringe-bitmap> . magit-fringe-bitmapv)
+                                                     (cons (if (char-displayable-p ?…) "…" "...")
+                                                           t)))))
+
 (after! magit
   (magit-add-section-hook 'magit-status-sections-hook
                           'magit-insert-ignored-files
@@ -536,17 +552,16 @@
       ;; treemacs-sorting 'alphabetic-asc
       ;; treemacs-user-mode-line-format nil
       treemacs-width 40
-      treemacs-follow-after-init t
-      )
+      treemacs-follow-after-init t)
 
 (after! treemacs
-  (add-hook! '(treemacs-mode-hook treemacs-select-hook)
-    (defun acml/set-treemacs-fringes ()
-      (set-window-fringes nil 8)))
+  ;; (add-hook! '(treemacs-mode-hook treemacs-select-hook)
+  ;;   (defun acml/set-treemacs-fringes ()
+  ;;     (set-window-fringes nil 8)))
   ;; highlight current line in fringe for treemacs window
-  (treemacs-fringe-indicator-mode 'always)
-  (treemacs-follow-mode t)
-  (treemacs-filewatch-mode t))
+  ;; (treemacs-fringe-indicator-mode 'always)
+  (treemacs-follow-mode)
+  (treemacs-filewatch-mode))
 
 (use-package! turkish
   :commands (turkish-mode)
