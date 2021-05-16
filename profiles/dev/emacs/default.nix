@@ -31,7 +31,7 @@ in lib.mkMerge [
               source = builtins.fetchGit {
                 url = "https://github.com/hlissner/doom-emacs";
                 ref = "develop";
-                rev = "6d2c6b44fa915ed5db8ebcae91e9355a9ef7b663";
+                rev = "f95bf845c3e8eb065637e9a773d5a61819d69d8d";
               };
               onChange = "${pkgs.writeShellScript "doom-change" ''
                 export DOOMDIR="${config.home.sessionVariables.DOOMDIR}"
