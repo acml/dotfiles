@@ -7,8 +7,10 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:LnL7/nix-darwin";
+    nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     # home-manager.url= "github:berbiche/home-manager/temporary-shared-modules-fix";
     home-manager.url= "github:nix-community/home-manager";
+    home-manager.inputs.nixpkgs.follows = "nixpkgs";
     # I don't need to pin Home Manager's nixpkgs because it inherits
     # the nixpkgs version from nix-darwin/nixos
     #home-manager.inputs.nixpkgs.follows = "nixpkgs";
@@ -16,8 +18,9 @@
     my-nur = { url = "github:berbiche/nur-packages"; flake = false; };
     my-nixpkgs.url = "github:berbiche/nixpkgs/init-xfce4-i3-workspaces-plugin";
 
-    doom-emacs.url = "github:vlaci/nix-doom-emacs";
-    doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
+    # doom-emacs.url = "github:vlaci/nix-doom-emacs";
+    # doom-emacs.inputs.emacs-overlay.follows = "emacs-overlay";
+    # emacs-overlay.url = "github:nix-community/emacs-overlay/472d140a036bd72a09119e408dad07afa7cac305";
     emacs-overlay.url = "github:nix-community/emacs-overlay";
 
     neovim-nightly.url = "github:nix-community/neovim-nightly-overlay";
@@ -28,13 +31,13 @@
       url = "github:colemickens/nixpkgs-wayland";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    vim-theme-monokai = { url = "github:sickill/vim-monokai"; flake = false; };
-    vim-theme-anderson = { url = "github:tlhr/anderson.vim"; flake = false; };
-    vim-theme-synthwave84 = { url = "github:artanikin/vim-synthwave84"; flake = false; };
-    vim-theme-gruvbox = { url = "github:morhetz/gruvbox"; flake = false; };
+    # vim-theme-monokai = { url = "github:sickill/vim-monokai"; flake = false; };
+    # vim-theme-anderson = { url = "github:tlhr/anderson.vim"; flake = false; };
+    # vim-theme-synthwave84 = { url = "github:artanikin/vim-synthwave84"; flake = false; };
+    # vim-theme-gruvbox = { url = "github:morhetz/gruvbox"; flake = false; };
 
-    nixvim.url = "github:pta2002/nixvim";
-    nixvim.inputs.nixpkgs.follows = "nixpkgs";
+    # nixvim.url = "github:pta2002/nixvim";
+    # nixvim.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs @ { nixpkgs, self, ... }: let
