@@ -100,9 +100,13 @@
   (add-hook 'after-make-frame-functions
             (lambda (frame)
               (with-selected-frame frame
+                ;; Adjust the font settings of FRAME so Emacs can display emoji properly.
+                (set-fontset-font t 'symbol (font-spec :family "Noto Color Emoji") frame)
+                (set-fontset-font t 'symbol (font-spec :family "Apple Color Emoji") frame 'append)
+                (set-fontset-font t 'symbol (font-spec :family "Segoe UI Emoji") frame 'append)
+                (set-fontset-font t 'symbol (font-spec :family "Symbola") frame 'append)
                 ;; (load-theme 'doom-one t)
-                (modus-themes-load-operandi)
-                ))))
+                (modus-themes-load-operandi)))))
 
 ;; (windmove-default-keybindings 'control)
 ;; (windswap-default-keybindings 'control 'shift)
@@ -343,11 +347,23 @@
 
 (after! lsp-mode
   (setq lsp-headerline-breadcrumb-enable t
+        lsp-lens-enable nil
+        lsp-signature-render-documentation t
         ;; lsp-lens-enable t
         ;; lsp-enable-file-watchers t
         ;; lsp-signature-auto-activate nil
         ;; lsp-completion-use-last-result nil
         ))
+
+(after! lsp-ui
+  (setq lsp-ui-doc-enable nil
+        lsp-ui-doc-include-signature t
+        lsp-ui-doc-max-height 50
+        lsp-ui-doc-max-width 150
+        lsp-ui-doc-position 'bottom
+        lsp-ui-doc-use-childframe t
+        lsp-ui-sideline-show-hover nil
+        lsp-ui-sideline-show-symbol t))
 
 (add-hook! ('text-mode-hook 'prog-mode-hook)
   (defun acml/set-fringe-widths ()

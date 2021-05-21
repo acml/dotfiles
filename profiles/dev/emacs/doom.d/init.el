@@ -26,15 +26,15 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        (:if (version<= "28.0" emacs-version)
-        (ivy +prescient +childframe +icons) ; a search engine for love and life
-        (ivy +prescient +icons))
+        (ivy +fuzzy +prescient +childframe +icons) ; a search engine for love and life
+        (ivy +fuzzy +prescient +icons))
 
        :ui
        ;;deft              ; notational velocity for Emacs
        doom              ; what makes DOOM look the way it does
        doom-dashboard    ; a nifty splash screen for Emacs
        doom-quit         ; DOOM quit-message prompts when you quit Emacs
-       ;;(emoji +unicode)  ; 🙂
+       ;; (emoji +github +unicode)  ; 🙂
        ;;fill-column       ; a `fill-column' indicator
        hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
        hydra
@@ -83,7 +83,7 @@
        vterm             ; the best terminal emulation in Emacs
 
        :checkers
-       (syntax +childframe); tasing you for every semicolon you forget
+       ;; (syntax +childframe); tasing you for every semicolon you forget
        (spell +aspell)     ; tasing you for misspelling mispelling
        ;;grammar           ; tasing grammar mistake every you make
 
