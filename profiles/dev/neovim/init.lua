@@ -31,7 +31,7 @@ require('packer').startup(function()
   requires = {{'nvim-lua/popup.nvim'}, {'nvim-lua/plenary.nvim'}}
   }
   use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-  use 'joshdick/onedark.vim'
+  use {"npxbr/gruvbox.nvim", requires = {"rktjmp/lush.nvim"}}
   use 'itchyny/lightline.vim'
   use { 'lukas-reineke/indent-blankline.nvim', branch="lua" }
   use 'hkupty/iron.nvim.git'
@@ -81,11 +81,11 @@ vim.wo.signcolumn="yes"
 
 --Set colorscheme (order is important here)
 vim.o.termguicolors = true
-vim.g.onedark_terminal_italics = 2
-vim.cmd[[colorscheme onedark]]
+vim.o.background = "dark"
+vim.cmd[[colorscheme gruvbox]]
 
 --Set statusbar
-vim.g.lightline = { colorscheme = 'onedark';
+vim.g.lightline = { colorscheme = 'gruvbox';
       active = { left = { { 'mode', 'paste' }, { 'gitbranch', 'readonly', 'filename', 'modified' } } };
       component_function = { gitbranch = 'fugitive#head', };
 }

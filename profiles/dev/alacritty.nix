@@ -57,7 +57,6 @@ in
         italic.style = "Italic";
         bold_italic.family = defaultFont;
         bold_italic.style = "Bold Italic";
-        use_thin_strokes = true;
       };
 
       # Colors (Tomorrow Night Bright)

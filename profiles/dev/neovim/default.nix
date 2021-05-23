@@ -11,6 +11,7 @@ in {
           rust-analyzer
           gopls
           nodePackages.pyright
+          universal-ctags
       ];
       xdg.configFile."nvim/init.lua".source = ./init.lua;
       xdg.configFile."nvim/parser/c.so".source = "${pkgs.tree-sitter.builtGrammars.tree-sitter-c}/parser";

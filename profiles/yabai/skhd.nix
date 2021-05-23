@@ -26,9 +26,9 @@ let
   plus = "shift - ${equal}";
 
   binaries = rec {
-    terminal = "${alacritty} --working-directory $HOME";
+    terminal = "${kitty} --directory $HOME";
 
-    alacritty = "${pkgs.alacritty}/bin/alacritty";
+    kitty = "${pkgs.kitty}/bin/kitty";
     # emacs = "emacsclient -a '' -nc";
     emacs = "env DOOMDIR=\${HOME}/.config/doom DOOMLOCALDIR=\${HOME}/.config/doom-local emacsclient -s default -a '' -nc";
   };

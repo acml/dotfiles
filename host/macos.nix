@@ -63,10 +63,11 @@ in
   };
 
   system.defaults.dock = {
+    autohide = true;
     expose-group-by-app = true;
     minimize-to-application = true;
     mru-spaces = false;
-    orientation = "left";
+    orientation = "right";
     show-recents = true;
     tilesize = 32;
   };
