@@ -29,6 +29,7 @@ in
     enableFontDir = true;
     fonts = with pkgs; [
       emacs-all-the-icons-fonts
+      fira-code
       (nerdfonts.override {
         fonts = [
           # "DejaVuSansMono"

@@ -423,7 +423,7 @@
         ;; 'accented-background, 'underline-neutral,
         ;; 'underline-accented, 'underline-only-neutral,
         ;; 'underline-only-accented
-        modus-themes-hl-line 'accented-background
+        modus-themes-hl-line 'underline-only-neutral
 
         modus-themes-paren-match 'subtle-bold ; {nil,'subtle-bold,'intense,'intense-bold}
 
