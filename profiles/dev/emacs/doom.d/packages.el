@@ -68,8 +68,6 @@
 (package! org-pretty-table :recipe (:host github :repo "Fuco1/org-pretty-table"))
 (package! dired-subtree)
 
-(package! docker)
-(package! docker-tramp)
 (package! highlight-parentheses)
 (package! journalctl-mode)
 

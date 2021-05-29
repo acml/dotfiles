@@ -31,7 +31,7 @@ in lib.mkMerge [
               source = builtins.fetchGit {
                 url = "https://github.com/hlissner/doom-emacs";
                 ref = "develop";
-                rev = "68bee5043ceae9f9715c87dba1f943b3b8388df9";
+                rev = "69ea5c2020c77ad31a2234732684dbf17ee318e3";
               };
               onChange = "${pkgs.writeShellScript "doom-change" ''
                 export DOOMDIR="${config.home.sessionVariables.DOOMDIR}"
@@ -108,9 +108,10 @@ in lib.mkMerge [
           };
 
           home.packages = with pkgs; [
+            coreutils
             (lib.mkIf isDarwin coreutils-prefixed)
             ## Doom dependencies
-            global
+            # global
             (ripgrep.override { withPCRE2 = true; })
 
             ## Optional dependencies

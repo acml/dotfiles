@@ -26,9 +26,9 @@ let
   plus = "shift - ${equal}";
 
   binaries = rec {
-    terminal = "${kitty} --directory $HOME";
+    terminal = "${wezterm}";
 
-    kitty = "${pkgs.kitty}/bin/kitty";
+    wezterm = "${pkgs.wezterm}/bin/wezterm";
     # emacs = "emacsclient -a '' -nc";
     emacs = "env DOOMDIR=\${HOME}/.config/doom DOOMLOCALDIR=\${HOME}/.config/doom-local emacsclient -s default -a '' -nc";
   };

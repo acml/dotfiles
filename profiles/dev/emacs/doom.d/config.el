@@ -254,7 +254,8 @@
 (add-hook! dired-mode
   (dired-hide-details-mode 1)
   ;; (dired-show-readme-mode 1)
-  (dired-auto-readme-mode 1))
+  (dired-auto-readme-mode 1)
+  (hl-line-mode 1))
 
 (use-package! dired-subtree
   :after dired
@@ -275,9 +276,6 @@
    (:map dired-mode-map
      :desc "Up" :n "<left>" #'dired-up-directory
      :desc "Down" :n "<right>" #'dired-find-file)))
-
-(use-package! docker-tramp)
-(use-package! docker)
 
 ;; Easier to match with a bspwm rule:
 ;;   bspc rule -a 'Emacs:emacs-everywhere' state=floating sticky=on
@@ -347,22 +345,17 @@
 
 (after! lsp-mode
   (setq lsp-headerline-breadcrumb-enable t
-        lsp-lens-enable nil
-        lsp-signature-render-documentation t
-        ;; lsp-lens-enable t
-        ;; lsp-enable-file-watchers t
-        ;; lsp-signature-auto-activate nil
-        ;; lsp-completion-use-last-result nil
-        ))
+        lsp-signature-render-documentation t))
 
 (after! lsp-ui
-  (setq lsp-ui-doc-enable nil
+  (setq lsp-ui-doc-enable nil ; fixes the LSP lag
+        lsp-ui-doc-position 'bottom
+        lsp-ui-doc-use-childframe t
         lsp-ui-doc-include-signature t
         lsp-ui-doc-max-height 50
         lsp-ui-doc-max-width 150
-        lsp-ui-doc-position 'bottom
-        lsp-ui-doc-use-childframe t
-        lsp-ui-sideline-show-hover nil
+        lsp-ui-doc-include-signature t
+        lsp-ui-sideline-show-hover t
         lsp-ui-sideline-show-symbol t))
 
 (add-hook! ('text-mode-hook 'prog-mode-hook)
@@ -423,7 +416,7 @@
         ;; 'accented-background, 'underline-neutral,
         ;; 'underline-accented, 'underline-only-neutral,
         ;; 'underline-only-accented
-        modus-themes-hl-line 'underline-only-neutral
+        modus-themes-hl-line nil
 
         modus-themes-paren-match 'subtle-bold ; {nil,'subtle-bold,'intense,'intense-bold}
 
@@ -510,7 +503,8 @@
   (setq
    ;; If you use `org' and don't want your org files in the default location below,
    ;; change `org-directory'. It must be set before org loads!
-   org-directory "~/Documents/org/"
+   org-directory (expand-file-name "~/Documents/org/")
+   org-agenda-files (list org-directory)
    ;; ;; ;; org-noter-notes-search-path '("~/Documents/org/notes/")
    ;; org-archive-location (concat org-directory ".archive/%s::")
    ;; org-roam-directory (concat org-directory "notes/")
@@ -561,6 +555,10 @@
    :compile "make O=am43xx_evm ARCH=arm CROSS_COMPILE=arm-openwrt-linux-gnueabi- all"
    :compilation-dir "."))
 
+;; (remove-hook 'doom-first-buffer-hook #'global-hl-line-mode)
+;; (setq global-hl-line-modes nil)
+;; (add-hook! 'rainbow-mode-hook
+;;     (hl-line-mode (if rainbow-mode -1 +1)))
 (use-package! rainbow-mode
   :hook
   ((prog-mode . rainbow-mode)
@@ -598,9 +596,7 @@
   ;; :init (evil-leader/set-key (kbd "ot") 'turkish-mode)
   )
 
-(use-package! vterm
-  :config
-  (setq vterm-max-scrollback 100000))
+(setq vterm-max-scrollback 100000)
 
 ;; text mode directory tree
 (use-package! ztree

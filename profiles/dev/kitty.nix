@@ -8,7 +8,7 @@ let
 in {
   my.home = { ... }: {
     programs.kitty = {
-      enable = true;
+      enable = false;
 
       # font.name = "JetBrainsMono Nerd Font Mono";
       # font.name = "FantasqueSansMono Nerd Font Mono";
