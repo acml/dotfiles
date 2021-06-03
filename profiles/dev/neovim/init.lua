@@ -123,7 +123,7 @@ vim.g.indent_blankline_filetype_exclude = { 'help', 'packer' }
 vim.g.indent_blankline_buftype_exclude = { 'terminal', 'nofile'}
 vim.g.indent_blankline_char_highlight = 'LineNr'
 vim.g.indent_blankline_show_trailing_blankline_indent = false
-vim.g.indent_blankline_show_current_context = true
+-- vim.g.indent_blankline_show_current_context = false
 
 -- Toggle to disable mouse mode and indentlines for easier paste
 ToggleMouse = function()
@@ -187,7 +187,7 @@ require('telescope').setup {
 }
 require('telescope').load_extension('fzf')
 --Add leader shortcuts
-vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>lua require('telescope.builtin').find_files()<cr>]], { noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<leader>f', [[<cmd>lua require('telescope.builtin').find_files({previewer = false})<cr>]], { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader><space>', [[<cmd>lua require('telescope.builtin').buffers()<cr>]], { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>l', [[<cmd>lua require('telescope.builtin').current_buffer_fuzzy_find()<cr>]], { noremap = true, silent = true})
 vim.api.nvim_set_keymap('n', '<leader>t', [[<cmd>lua require('telescope.builtin').tags()<cr>]], { noremap = true, silent = true})
@@ -465,27 +465,27 @@ vim.cmd([[
 -- Set completeopt to have a better completion experience
 vim.o.completeopt="menuone,noinsert,noselect"
 
--- require'nvim-treesitter.configs'.setup {
---   ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
---   highlight = {
---     enable = true,              -- false will disable the whole extension
---   },
---   incremental_selection = {
---     enable = true,
---     keymaps = {
---       init_selection = "gnn",
---       node_incremental = "grn",
---       scope_incremental = "grc",
---       node_decremental = "grm",
---     },
---   },
---   indent = {
---     enable = true
---   }
--- }
+require'nvim-treesitter.configs'.setup {
+  -- ensure_installed = "maintained", -- one of "all", "maintained" (parsers with maintainers), or a list of languages
+  highlight = {
+    enable = true,              -- false will disable the whole extension
+  },
+  incremental_selection = {
+    enable = true,
+    keymaps = {
+      init_selection = "gnn",
+      node_incremental = "grn",
+      scope_incremental = "grc",
+      node_decremental = "grm",
+    },
+  },
+  indent = {
+    enable = true,
+  },
+}
 
 -- Formatters
--- vim.g.neoformat_enabled_python = { 'black' }
+vim.g.neoformat_enabled_python = { 'black' }
 
 local iron = require('iron')
 
