@@ -392,6 +392,8 @@
         modus-themes-bold-constructs t
         modus-themes-no-mixed-fonts nil
         modus-themes-subtle-line-numbers t
+        modus-themes-success-deuteranopia t
+        modus-themes-inhibit-reload nil ; only applies to `customize-set-variable' and related
 
         modus-themes-fringes nil ; {nil,'subtle,'intense}
 
@@ -401,10 +403,11 @@
         ;; 'intense-foreground-straight-underline, 'colored-background
         modus-themes-lang-checkers nil
 
-        ;; Options for `modus-themes-mode-line': nil, '3d, 'moody,
-        ;; 'borderless, 'borderless-3d, 'borderless-moody, 'accented,
-        ;; 'accented-3d, 'accented-moody
-        modus-themes-mode-line 'borderless-3d
+        ;; Options for `modus-themes-mode-line' are either nil, or a list
+        ;; that can combine any of `3d' OR `moody', `borderless',
+        ;; `accented'.  The variable's doc string shows all possible
+        ;; combinations.
+        modus-themes-mode-line '(3d borderless)
 
         ;; Options for `modus-themes-syntax': nil, 'faint,
         ;; 'yellow-comments, 'green-strings,
@@ -431,6 +434,8 @@
 
         modus-themes-completions 'opinionated ; {nil,'moderate,'opinionated}
 
+        modus-themes-mail-citations 'faint ; {nil,'faint,'monochrome}
+
         ;; Options for `modus-themes-region': nil, 'no-extend, 'bg-only,
         ;; 'bg-only-no-extend, 'accent, 'accent-no-extend
         modus-themes-region 'bg-only-no-extend
@@ -439,8 +444,13 @@
         ;; 'bg-only, 'deuteranopia, 'fg-only-deuteranopia
         modus-themes-diffs 'desaturated
 
-        modus-themes-org-blocks nil ; {nil,'grayscale,'rainbow}
-        modus-themes-org-habit nil ; {nil,'simplified,'traffic-light}
+        modus-themes-org-blocks 'gray-background ; {nil,'gray-background,'tinted-background}
+
+        modus-themes-org-agenda ; this is an alist: read the manual or its doc string
+        '((header-block . (variable-pitch scale-title))
+          (header-date . (grayscale workaholic bold-today))
+          (scheduled . uniform)
+          (habit . traffic-light-deuteranopia))
 
         modus-themes-headings ; this is an alist: read the manual or its doc string
         '((1 . line)
@@ -583,9 +593,9 @@
       treemacs-follow-after-init t)
 
 (after! treemacs
-  ;; (add-hook! '(treemacs-mode-hook treemacs-select-hook)
-  ;;   (defun acml/set-treemacs-fringes ()
-  ;;     (set-window-fringes nil 8)))
+  ;; (add-hook! '(treemacs-mode-hook treemacs-select-functions)
+  ;;            (defun acml/set-treemacs-fringes (&optional visibilty)
+  ;;              (set-window-fringes nil 8)))
   ;; highlight current line in fringe for treemacs window
   ;; (treemacs-fringe-indicator-mode 'always)
   (treemacs-follow-mode)
